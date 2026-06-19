@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RVA.Shared", "RVA.Shared\RVA.Shared.csproj", "{1B5C4FC4-04BD-4FEE-B669-A2F020320D27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Komponenta1.InformacioniSistem", "komponenta1.InformacioniSistem\Komponenta1.InformacioniSistem.csproj", "{D6EE0FD3-9B84-47A3-BE79-3EB3CBC25D39}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Komponenta1.InformacioniSistem", "Komponenta1.InformacioniSistem\Komponenta1.InformacioniSistem.csproj", "{D6EE0FD3-9B84-47A3-BE79-3EB3CBC25D39}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Komponenta2.Statistika", "Komponenta2.Statistika\Komponenta2.Statistika.csproj", "{C2EBBC60-C335-41D1-A99E-FD5A4E44A8E1}"
 EndProject

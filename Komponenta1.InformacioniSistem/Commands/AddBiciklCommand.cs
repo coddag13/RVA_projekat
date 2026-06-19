@@ -1,6 +1,7 @@
-using Projekat.Komponenta1;
+using Komponenta1.InformacioniSistem;
+using RVA.Shared.Models;
 
-namespace Projekat.Komponenta1
+namespace Komponenta1.InformacioniSistem
 {
     public class AddBiciklCommand : IUndoableCommand
     {

@@ -1,4 +1,5 @@
-namespace Projekat.Komponenta1
+using RVA.Shared.Models;
+namespace Komponenta1.InformacioniSistem
 {
     public class DeleteTelemetrijaCommand : IUndoableCommand
     {

@@ -1,8 +1,9 @@
 using System;
+using RVA.Shared.Models;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Projekat.Komponenta1
+namespace Komponenta1.InformacioniSistem
 {
 	public interface IBiciklService
 	{

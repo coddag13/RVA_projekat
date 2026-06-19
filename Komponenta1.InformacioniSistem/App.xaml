@@ -1,7 +1,7 @@
-﻿<Application x:Class="komponenta1.InformacioniSistem.App"
+<Application x:Class="Komponenta1.InformacioniSistem.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:komponenta1.InformacioniSistem"
+             xmlns:local="clr-namespace:Komponenta1.InformacioniSistem"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

@@ -1,28 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Komponenta1.InformacioniSistem;
 
-namespace komponenta1.InformacioniSistem
+using RVA.Shared.Models;
+using System;
+using System.IO;
+using System.Windows;
+
+namespace Komponenta1.InformacioniSistem
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly IDataStorage dataStorage;
+        private readonly DataStore dataStore;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            string dataFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
+            string dataFilePath = Path.Combine(dataFolder, "podaci.xml");
+            string logFilePath = Path.Combine(dataFolder, "aktivnosti.txt");
+
+            dataStorage = new XmlDataStorage(dataFilePath);
+            dataStore = dataStorage.Load();
+
+            SeedDataHelper.DodajPocetnePodatkeAkoJePrazno(dataStore);
+
+            ILogger logger = new TextFileLogger(logFilePath);
+
+            SimulatorStanjaVoznje simulatorStanja = new SimulatorStanjaVoznje();
+
+            IBiciklService biciklService = new BiciklService(dataStore, logger);
+            ITelemetrijaService telemetrijaService = new TelemetrijaService(dataStore, logger, simulatorStanja);
+
+            UndoRedoManager undoRedoManager = new UndoRedoManager();
+
+            BicikliViewModel bicikliViewModel = new BicikliViewModel(biciklService, undoRedoManager);
+            TelemetrijaViewModel telemetrijaViewModel = new TelemetrijaViewModel(telemetrijaService, undoRedoManager);
+            GrafikonViewModel grafikonViewModel = new GrafikonViewModel(telemetrijaService);
+
+            MainViewModel mainViewModel = new MainViewModel(
+                bicikliViewModel,
+                telemetrijaViewModel,
+                grafikonViewModel);
+
+            DataContext = mainViewModel;
+
+            dataStorage.Save(dataStore);
+            logger.Log("Pokrenuta Komponenta 1 - Informacioni sistem.");
         }
     }
 }

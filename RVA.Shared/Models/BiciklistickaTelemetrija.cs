@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Projekat.Komponenta1
+namespace RVA.Shared.Models
 {
     public class BiciklistickaTelemetrija
     {

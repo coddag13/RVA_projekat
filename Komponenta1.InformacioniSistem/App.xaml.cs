@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using RVA.Shared.Models;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace komponenta1.InformacioniSistem
+namespace Komponenta1.InformacioniSistem
 {
     /// <summary>
     /// Interaction logic for App.xaml
