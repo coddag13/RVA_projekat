@@ -84,3 +84,7 @@ _ReSharper*/
 *.tmp
 *.temp
 *.log
+
+# Local reference/export folders
+_reference_extract/
+ExportCodeComponent1/
