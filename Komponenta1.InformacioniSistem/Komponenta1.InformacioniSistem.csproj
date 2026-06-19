@@ -87,7 +87,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\AddBiciklCommand.cs" />
+    <Compile Include="Commands\AddTelemetrijaCommand.cs" />
+    <Compile Include="Commands\DeleteBiciklCommand.cs" />
+    <Compile Include="Commands\DeleteTelemetrijaCommand.cs" />
+    <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Commands\UndoRedoManager.cs" />
+    <Compile Include="Commands\UpdateBiciklCommand.cs" />
+    <Compile Include="Commands\UpdateTelemetrijaCommand.cs" />
+    <Compile Include="Services\BiciklService.cs" />
+    <Compile Include="Services\TelemetrijaService.cs" />
     <Compile Include="Services\TextFileLogger.cs" />
+    <Compile Include="State\OdustajanjeStanje.cs" />
+    <Compile Include="State\SimulatorStanjaVoznje.cs" />
+    <Compile Include="State\StabilnoStanje.cs" />
+    <Compile Include="State\UmorStanje.cs" />
+    <Compile Include="State\VelikiNaporiStanje.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -143,9 +158,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Commands\" />
     <Folder Include="Models\" />
-    <Folder Include="State\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

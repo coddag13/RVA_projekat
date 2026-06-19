@@ -8,7 +8,7 @@ namespace Projekat.Komponenta1
 	{
 		List<TrkackiBicikl> GetAll();
 
-		List<TrkackiBicikl> Search(string tim, string vozac, double tezina, bool sprinter);
+		List<TrkackiBicikl> Search(string tim, string vozac, double? tezina, bool? sprinter);
 
 		void Add(TrkackiBicikl bicikl);
 		void Update(TrkackiBicikl bicikl);
