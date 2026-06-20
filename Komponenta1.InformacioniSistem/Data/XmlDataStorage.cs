@@ -33,6 +33,13 @@ namespace Komponenta1.InformacioniSistem
 
         public void Save(DataStore dataStore)
         {
+            string directory = Path.GetDirectoryName(filePath);
+
+            if (!string.IsNullOrWhiteSpace(directory) && !Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
             XmlSerializer serializer = new XmlSerializer(typeof(DataStore));
 
             using (FileStream stream = new FileStream(filePath, FileMode.Create))

@@ -28,8 +28,8 @@ namespace Komponenta1.InformacioniSistem
                 .Where(b =>
                     (string.IsNullOrWhiteSpace(tim) || b.Tim.ToLower().Contains(tim.ToLower())) &&
                     (string.IsNullOrWhiteSpace(vozac) || b.Vozac.ToLower().Contains(vozac.ToLower())) &&
-                    (tezina <= 0 || b.Tezina == tezina) &&
-                    b.Sprinter == sprinter)
+                    (!tezina.HasValue || tezina.Value <= 0 || b.Tezina == tezina.Value) &&
+                    (!sprinter.HasValue || b.Sprinter == sprinter.Value))
                 .ToList();
         }
 

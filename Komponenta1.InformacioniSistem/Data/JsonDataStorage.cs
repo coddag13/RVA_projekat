@@ -35,6 +35,13 @@ namespace Komponenta1.InformacioniSistem
 
         public void Save(DataStore dataStore)
         {
+            string directory = Path.GetDirectoryName(filePath);
+
+            if (!string.IsNullOrWhiteSpace(directory) && !Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
             JsonSerializerOptions options = new JsonSerializerOptions
             {
                 WriteIndented = true

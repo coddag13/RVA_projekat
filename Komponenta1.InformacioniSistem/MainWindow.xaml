@@ -4,9 +4,511 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Komponenta1.InformacioniSistem"
+        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Peloton Pulse"
+        Height="760"
+        Width="1180"
+        MinHeight="680"
+        MinWidth="1040"
+        WindowStartupLocation="CenterScreen"
+        Background="#FFF7EF">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+
+        <SolidColorBrush x:Key="BojaPozadine" Color="#FFF7EF"/>
+        <SolidColorBrush x:Key="BojaKartice" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="BojaPeach" Color="#FFDAB9"/>
+        <SolidColorBrush x:Key="BojaTeksta" Color="#263238"/>
+        <SolidColorBrush x:Key="BojaTeal" Color="#2F6F73"/>
+        <SolidColorBrush x:Key="BojaSage" Color="#6B8F71"/>
+        <SolidColorBrush x:Key="BojaCoral" Color="#E76F51"/>
+        <SolidColorBrush x:Key="BojaAmber" Color="#F4A261"/>
+        <SolidColorBrush x:Key="BojaIvica" Color="#E8D7C3"/>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource BojaTeksta}"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="MinWidth" Value="92"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="12,4"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="{StaticResource BojaTeal}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BojaTeal}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource BojaSage}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BojaSage}"/>
+        </Style>
+
+        <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource BojaCoral}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BojaCoral}"/>
+        </Style>
+
+        <Style x:Key="WarnButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource BojaAmber}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BojaAmber}"/>
+            <Setter Property="Foreground" Value="#263238"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BojaIvica}"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BojaIvica}"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="Margin" Value="0,12,0,0"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="IsReadOnly" Value="False"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BojaIvica}"/>
+            <Setter Property="RowBackground" Value="#FFFFFF"/>
+            <Setter Property="AlternatingRowBackground" Value="#FFF3E7"/>
+        </Style>
+
+        <Style TargetType="TabControl">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style TargetType="TabItem">
+            <Setter Property="Padding" Value="18,8"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource BojaTeksta}"/>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="270"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0"
+                Background="#FFDAB9"
+                BorderBrush="#E8D7C3"
+                BorderThickness="0,0,1,0">
+            <DockPanel Margin="20">
+                <StackPanel DockPanel.Dock="Top">
+                    <TextBlock Text="Peloton Pulse"
+                               FontSize="28"
+                               FontWeight="Bold"
+                               Margin="0,8,0,2"/>
+
+                    <TextBlock Text="Telemetrijski centar"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="#2F6F73"
+                               Margin="0,0,0,28"/>
+
+                    <Border Background="#FFF7EF"
+                            BorderBrush="#E8D7C3"
+                            BorderThickness="1"
+                            Padding="14"
+                            Margin="0,0,0,14">
+                        <StackPanel>
+                            <TextBlock Text="Radni rezim"
+                                       FontWeight="Bold"
+                                       Margin="0,0,0,8"/>
+                            <TextBlock Text="Lokalna obrada podataka"
+                                       FontSize="12"
+                                       Opacity="0.85"/>
+                            <TextBlock Text="XML skladiste aktivno"
+                                       FontSize="12"
+                                       Opacity="0.85"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Background="#2F6F73"
+                            Padding="14"
+                            Margin="0,0,0,14">
+                        <StackPanel>
+                            <TextBlock Text="Stanje sistema"
+                                       Foreground="White"
+                                       FontWeight="Bold"
+                                       Margin="0,0,0,8"/>
+                            <TextBlock Text="Spreman za pracenje voznji"
+                                       Foreground="White"
+                                       FontSize="12"
+                                       Opacity="0.9"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Background="#FFF3E7"
+                            BorderBrush="#E8D7C3"
+                            BorderThickness="1"
+                            Padding="14">
+                        <StackPanel>
+                            <TextBlock Text="Domen podataka"
+                                       FontWeight="Bold"
+                                       Margin="0,0,0,8"/>
+                            <TextBlock Text="Trkacki bicikli"
+                                       FontSize="12"
+                                       Opacity="0.85"/>
+                            <TextBlock Text="Biciklisticka telemetrija"
+                                       FontSize="12"
+                                       Opacity="0.85"/>
+                            <TextBlock Text="Stanja voznje"
+                                       FontSize="12"
+                                       Opacity="0.85"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel DockPanel.Dock="Bottom">
+                    <Border Background="#FFF7EF"
+                            BorderBrush="#E8D7C3"
+                            BorderThickness="1"
+                            Padding="12">
+                        <StackPanel>
+                            <TextBlock Text="Live monitoring"
+                                       FontWeight="Bold"/>
+                            <TextBlock Text="Brzina, puls i status napora"
+                                       FontSize="12"
+                                       Opacity="0.8"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <Grid Grid.Column="1" Margin="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <DockPanel Grid.Row="0" Margin="0,0,0,18">
+                <Button DockPanel.Dock="Right"
+                        Content="Sacuvaj podatke"
+                        Command="{Binding SacuvajCommand}"
+                        Style="{StaticResource SecondaryButton}"
+                        MinWidth="140"
+                        Margin="12,8,0,0"/>
+
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="Pregled voznji"
+                               FontSize="30"
+                               FontWeight="Bold"/>
+                    <TextBlock Text="Operativni prikaz bicikala, telemetrije i trenutnih stanja"
+                               FontSize="14"
+                               Opacity="0.75"/>
+                </StackPanel>
+            </DockPanel>
+
+            <TabControl Grid.Row="1">
+                <TabItem Header="Bicikli">
+                    <Border Background="White"
+                            BorderBrush="#E8D7C3"
+                            BorderThickness="1"
+                            Padding="18">
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Top">
+                                <TextBlock Text="Novi bicikl"
+                                           FontSize="18"
+                                           FontWeight="Bold"
+                                           Margin="0,0,0,8"/>
+
+                                <WrapPanel>
+                                    <StackPanel Width="180">
+                                        <TextBlock Text="Tim"/>
+                                        <TextBox Text="{Binding BicikliVM.NoviTim, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Width="180">
+                                        <TextBlock Text="Vozac"/>
+                                        <TextBox Text="{Binding BicikliVM.NoviVozac, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Width="140">
+                                        <TextBlock Text="Tezina"/>
+                                        <TextBox Text="{Binding BicikliVM.NovaTezina, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+
+                                    <CheckBox Content="Sprinter"
+                                              IsChecked="{Binding BicikliVM.NoviSprinter}"
+                                              VerticalAlignment="Bottom"
+                                              Margin="12,0,0,8"/>
+                                </WrapPanel>
+
+                                <WrapPanel Margin="0,10,0,12">
+                                    <Button Content="Dodaj bicikl" Command="{Binding BicikliVM.AddBiciklCommand}" Style="{StaticResource SecondaryButton}"/>
+                                </WrapPanel>
+
+                                <TextBlock Text="{Binding BicikliVM.PorukaValidacije}"
+                                           Foreground="#E76F51"
+                                           FontWeight="SemiBold"
+                                           Margin="4,0,0,14"/>
+
+                                <TextBlock Text="Pretraga bicikala"
+                                           FontSize="18"
+                                           FontWeight="Bold"
+                                           Margin="0,0,0,8"/>
+
+                                <WrapPanel>
+                                    <StackPanel Width="180">
+                                        <TextBlock Text="Tim"/>
+                                        <TextBox Text="{Binding BicikliVM.PretragaTim, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Width="180">
+                                        <TextBlock Text="Vozac"/>
+                                        <TextBox Text="{Binding BicikliVM.PretragaVozac, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Width="140">
+                                        <TextBlock Text="Tezina"/>
+                                        <TextBox Text="{Binding BicikliVM.PretragaTezina, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+
+                                    <CheckBox Content="Sprinter filter"
+                                              IsChecked="{Binding BicikliVM.PretragaSprinter}"
+                                              IsThreeState="True"
+                                              VerticalAlignment="Bottom"
+                                              Margin="12,0,0,8"/>
+                                </WrapPanel>
+
+                                <WrapPanel Margin="0,10,0,0">
+                                    <Button Content="Pretrazi" Command="{Binding BicikliVM.SearchBiciklCommand}"/>
+                                    <Button Content="Izmijeni" Command="{Binding BicikliVM.UpdateBiciklCommand}"/>
+                                    <Button Content="Obrisi" Command="{Binding BicikliVM.DeleteBiciklCommand}" Style="{StaticResource DangerButton}"/>
+                                    <Button Content="Ponisti" Command="{Binding BicikliVM.UndoCommand}" Style="{StaticResource WarnButton}"/>
+                                    <Button Content="Ponovi" Command="{Binding BicikliVM.RedoCommand}" Style="{StaticResource WarnButton}"/>
+                                </WrapPanel>
+                            </StackPanel>
+
+                            <DataGrid ItemsSource="{Binding BicikliVM.Bicikli}"
+                                      SelectedItem="{Binding BicikliVM.IzabraniBicikl}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="220"/>
+                                    <DataGridTextColumn Header="Tim" Binding="{Binding Tim}" Width="*"/>
+                                    <DataGridTextColumn Header="Vozac" Binding="{Binding Vozac}" Width="*"/>
+                                    <DataGridTextColumn Header="Tezina" Binding="{Binding Tezina}" Width="100"/>
+                                    <DataGridCheckBoxColumn Header="Sprinter" Binding="{Binding Sprinter}" Width="100"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DockPanel>
+                    </Border>
+                </TabItem>
+
+                <TabItem Header="Telemetrija">
+                    <Border Background="White"
+                            BorderBrush="#E8D7C3"
+                            BorderThickness="1"
+                            Padding="18">
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Top">
+                                <TextBlock Text="Nova telemetrija"
+                                           FontSize="18"
+                                           FontWeight="Bold"
+                                           Margin="0,0,0,8"/>
+
+                                <WrapPanel>
+                                    <StackPanel Width="260">
+                                        <TextBlock Text="Bicikl"/>
+                                        <ComboBox ItemsSource="{Binding TelemetrijaVM.Bicikli}"
+                                                  SelectedItem="{Binding TelemetrijaVM.IzabraniBiciklZaTelemetriju}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Width="160">
+                                        <TextBlock Text="Brzina voznje"/>
+                                        <TextBox Text="{Binding TelemetrijaVM.NovaBrzinaVoznje, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Width="160">
+                                        <TextBlock Text="Puls vozaca"/>
+                                        <TextBox Text="{Binding TelemetrijaVM.NoviPulsVozaca, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Width="160">
+                                        <TextBlock Text="Stanje"/>
+                                        <ComboBox ItemsSource="{Binding TelemetrijaVM.DostupnaStanja}"
+                                                  SelectedItem="{Binding TelemetrijaVM.NovoStanje}"/>
+                                    </StackPanel>
+                                </WrapPanel>
+
+                                <WrapPanel Margin="0,10,0,12">
+                                    <Button Content="Dodaj telemetriju" Command="{Binding TelemetrijaVM.AddTelemetrijaCommand}" Style="{StaticResource SecondaryButton}"/>
+                                </WrapPanel>
+
+                                <TextBlock Text="{Binding TelemetrijaVM.PorukaValidacije}"
+                                           Foreground="#E76F51"
+                                           FontWeight="SemiBold"
+                                           Margin="4,0,0,14"/>
+
+                                <TextBlock Text="Pretraga telemetrije"
+                                           FontSize="18"
+                                           FontWeight="Bold"
+                                           Margin="0,0,0,8"/>
+
+                                <WrapPanel>
+                                    <StackPanel Width="180">
+                                        <TextBlock Text="Brzina voznje"/>
+                                        <TextBox Text="{Binding TelemetrijaVM.PretragaBrzinaVoznje, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Width="180">
+                                        <TextBlock Text="Puls vozaca"/>
+                                        <TextBox Text="{Binding TelemetrijaVM.PretragaPulsVozaca, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Width="180">
+                                        <TextBlock Text="Stanje"/>
+                                        <ComboBox ItemsSource="{Binding TelemetrijaVM.DostupnaStanja}"
+                                                  SelectedItem="{Binding TelemetrijaVM.PretragaStanje}"/>
+                                    </StackPanel>
+                                </WrapPanel>
+
+                                <WrapPanel Margin="0,10,0,0">
+                                    <Button Content="Pretrazi" Command="{Binding TelemetrijaVM.SearchTelemetrijaCommand}"/>
+                                    <Button Content="Izmijeni" Command="{Binding TelemetrijaVM.UpdateTelemetrijaCommand}"/>
+                                    <Button Content="Obrisi" Command="{Binding TelemetrijaVM.DeleteTelemetrijaCommand}" Style="{StaticResource DangerButton}"/>
+                                    <Button Content="Simuliraj stanje" Command="{Binding TelemetrijaVM.SimulirajStanjeTelemetrijaCommand}" Style="{StaticResource WarnButton}"/>
+                                    <Button Content="Ponisti" Command="{Binding TelemetrijaVM.UndoCommand}" Style="{StaticResource WarnButton}"/>
+                                    <Button Content="Ponovi" Command="{Binding TelemetrijaVM.RedoCommand}" Style="{StaticResource WarnButton}"/>
+                                </WrapPanel>
+                            </StackPanel>
+
+                            <DataGrid ItemsSource="{Binding TelemetrijaVM.Telemetrije}"
+                                      SelectedItem="{Binding TelemetrijaVM.IzabranaTelemetrija}">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Bicikl Id" Binding="{Binding BiciklId}" Width="220"/>
+                                    <DataGridTextColumn Header="Vrijeme ocitavanja" Binding="{Binding VremeOcitavanja}" Width="180"/>
+                                    <DataGridTextColumn Header="Brzina" Binding="{Binding BrzinaVoznje}" Width="100"/>
+                                    <DataGridTextColumn Header="Puls" Binding="{Binding PulsVozaca}" Width="100"/>
+                                    <DataGridTextColumn Header="Stanje" Binding="{Binding Stanje}" Width="*"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </DockPanel>
+                    </Border>
+                </TabItem>
+
+                <TabItem Header="Grafikon stanja">
+                    <Border Background="White"
+                            BorderBrush="#E8D7C3"
+                            BorderThickness="1"
+                            Padding="18">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.2*"/>
+                                <ColumnDefinition Width="0.8*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0"
+                                    Background="#FFF7EF"
+                                    BorderBrush="#E8D7C3"
+                                    BorderThickness="1"
+                                    Padding="18"
+                                    Margin="0,0,14,0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel>
+                                        <TextBlock Text="Raspodjela stanja voznje"
+                                                   FontSize="20"
+                                                   FontWeight="Bold"/>
+                                        <TextBlock Text="LiveCharts2 prikaz aktivnih telemetrijskih stanja"
+                                                   FontSize="13"
+                                                   Opacity="0.75"
+                                                   Margin="0,4,0,12"/>
+                                    </StackPanel>
+
+                                    <lvc:CartesianChart Grid.Row="1"
+                                                        Series="{Binding GrafikonVM.StanjeSeries}"
+                                                        XAxes="{Binding GrafikonVM.XAxes}"
+                                                        YAxes="{Binding GrafikonVM.YAxes}"
+                                                        DrawMarginFrame="{Binding GrafikonVM.OkvirGrafikona}"
+                                                        LegendPosition="Hidden"
+                                                        HorizontalAlignment="Stretch"
+                                                        VerticalAlignment="Stretch"
+                                                        MinHeight="380"/>
+                                </Grid>
+                            </Border>
+
+                            <Border Grid.Column="1"
+                                    Background="#FFFFFF"
+                                    BorderBrush="#E8D7C3"
+                                    BorderThickness="1"
+                                    Padding="18">
+                                <StackPanel>
+                                    <TextBlock Text="Stanje metrika"
+                                               FontSize="20"
+                                               FontWeight="Bold"
+                                               Margin="0,0,0,14"/>
+
+                                    <ItemsControl ItemsSource="{Binding GrafikonVM.StatistikaStanja}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Background="#FFF3E7"
+                                                        BorderBrush="#E8D7C3"
+                                                        BorderThickness="1"
+                                                        Padding="14"
+                                                        Margin="0,0,0,10">
+                                                    <DockPanel>
+                                                        <TextBlock DockPanel.Dock="Right"
+                                                                   Text="{Binding BrojInstanci}"
+                                                                   FontSize="26"
+                                                                   FontWeight="Bold"
+                                                                   Foreground="#2F6F73"/>
+                                                        <StackPanel>
+                                                            <TextBlock Text="{Binding Stanje}"
+                                                                       FontSize="16"
+                                                                       FontWeight="Bold"/>
+                                                            <TextBlock Text="instanci telemetrije"
+                                                                       FontSize="12"
+                                                                       Opacity="0.75"/>
+                                                        </StackPanel>
+                                                    </DockPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </TabItem>
+            </TabControl>
+        </Grid>
+
+        <Border Grid.ColumnSpan="2"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="0,0,28,28"
+                Background="#2F6F73"
+                Padding="18,12"
+                MinWidth="280"
+                Visibility="{Binding IsToastVisible, Converter={StaticResource BoolToVisibility}}">
+            <TextBlock Text="{Binding ToastMessage}"
+                       Foreground="White"
+                       FontWeight="SemiBold"/>
+        </Border>
     </Grid>
 </Window>

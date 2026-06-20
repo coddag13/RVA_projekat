@@ -1,9 +1,7 @@
-using Komponenta1.InformacioniSistem;
-
-using RVA.Shared.Models;
 using System;
 using System.IO;
 using System.Windows;
+using RVA.Shared.Models;
 
 namespace Komponenta1.InformacioniSistem
 {
@@ -26,22 +24,26 @@ namespace Komponenta1.InformacioniSistem
             SeedDataHelper.DodajPocetnePodatkeAkoJePrazno(dataStore);
 
             ILogger logger = new TextFileLogger(logFilePath);
-
             SimulatorStanjaVoznje simulatorStanja = new SimulatorStanjaVoznje();
+            ValidationService validationService = new ValidationService();
 
             IBiciklService biciklService = new BiciklService(dataStore, logger);
             ITelemetrijaService telemetrijaService = new TelemetrijaService(dataStore, logger, simulatorStanja);
 
             UndoRedoManager undoRedoManager = new UndoRedoManager();
 
-            BicikliViewModel bicikliViewModel = new BicikliViewModel(biciklService, undoRedoManager);
-            TelemetrijaViewModel telemetrijaViewModel = new TelemetrijaViewModel(telemetrijaService, undoRedoManager);
+            BicikliViewModel bicikliViewModel = new BicikliViewModel(biciklService, undoRedoManager, validationService);
+            TelemetrijaViewModel telemetrijaViewModel = new TelemetrijaViewModel(telemetrijaService, biciklService, undoRedoManager, validationService);
             GrafikonViewModel grafikonViewModel = new GrafikonViewModel(telemetrijaService);
 
             MainViewModel mainViewModel = new MainViewModel(
                 bicikliViewModel,
                 telemetrijaViewModel,
-                grafikonViewModel);
+                grafikonViewModel,
+                dataStorage,
+                dataStore);
+
+            mainViewModel.ShowToast("Sistem je spreman za rad.");
 
             DataContext = mainViewModel;
 
