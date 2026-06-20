@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Komponenta2.Statistika.Interfaces;
+using Komponenta2.Statistika.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Komponenta2.Statistika.Services;
+
 
 namespace Komponenta2.Statistika
 {
@@ -32,7 +34,18 @@ namespace Komponenta2.Statistika
                     var bicikli = client.GetBicikli();
                     var telemetrije = client.GetTelemetrije();
 
-                    ResultText.Text = $"Učitano: {bicikli.Count} bicikala, {telemetrije.Count} telemetrija.";
+                    IBiciklStatistikaAdapter adapter = new BiciklStatistikaAdapter();
+                    var statistike = adapter.Adapt(bicikli, telemetrije);
+
+                    var prikaz = string.Join("\n\n", statistike.Select(s =>
+                        $"{s.Tim} - {s.Vozac}\n" +
+                        $"  Broj merenja: {s.BrojMerenja}\n" +
+                        $"  Prosečna brzina: {s.ProsecnaBrzina:F2} km/h\n" +
+                        $"  Prosečan puls: {s.ProsecanPuls:F2}\n" +
+                        $"  Max brzina: {s.MaxBrzina:F2} km/h"
+                    ));
+
+                    ResultText.Text = prikaz;
                 }
             }
             catch (Exception ex)
