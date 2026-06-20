@@ -25,9 +25,19 @@ namespace Komponenta2.Statistika
         {
             InitializeComponent();
 
-            // Dependency injection (manuelno, bez DI containera)
             IBiciklStatistikaAdapter adapter = new BiciklStatistikaAdapter();
-            DataContext = new StatistikaViewModel(adapter);
+
+            var metode = new List<IStatistickaMetoda>
+            {
+                new ProsekStatistika(),
+                new MedianaStatistika(),
+                new MinMaxStatistika()
+            };
+
+            // Pocetna strategija — moze i null pa se setuje kroz SetStrategy
+            StatistickaObrada obrada = new StatistickaObrada(metode[0]);
+
+            DataContext = new StatistikaViewModel(adapter, obrada, metode);
         }
     }
 }

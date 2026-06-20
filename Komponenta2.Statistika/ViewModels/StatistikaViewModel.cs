@@ -10,19 +10,35 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 
+
 namespace Komponenta2.Statistika.ViewModels
 {
     public class StatistikaViewModel : ViewModelBase
     {
         private readonly IBiciklStatistikaAdapter adapter;
+        private readonly StatistickaObrada obrada;
 
-        private ObservableCollection<BiciklStatistika> bicikliStatistike;
-        public ObservableCollection<BiciklStatistika> BicikliStatistike
+        public ObservableCollection<BiciklStatistika> BicikliStatistike { get; set; }
+        public ObservableCollection<IStatistickaMetoda> DostupneMetode { get; set; }
+
+        private IStatistickaMetoda izabranaMetoda;
+        public IStatistickaMetoda IzabranaMetoda
         {
-            get { return bicikliStatistike; }
+            get { return izabranaMetoda; }
             set
             {
-                bicikliStatistike = value;
+                izabranaMetoda = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private StatistikaRezultat rezultat;
+        public StatistikaRezultat Rezultat
+        {
+            get { return rezultat; }
+            set
+            {
+                rezultat = value;
                 OnPropertyChanged();
             }
         }
@@ -39,12 +55,19 @@ namespace Komponenta2.Statistika.ViewModels
         }
 
         public ICommand UcitajPodatkeCommand { get; }
+        public ICommand IzracunajCommand { get; }
 
-        public StatistikaViewModel(IBiciklStatistikaAdapter adapter)
+        public StatistikaViewModel(IBiciklStatistikaAdapter adapter, StatistickaObrada obrada, List<IStatistickaMetoda> metode)
         {
             this.adapter = adapter;
+            this.obrada = obrada;
+
             BicikliStatistike = new ObservableCollection<BiciklStatistika>();
+            DostupneMetode = new ObservableCollection<IStatistickaMetoda>(metode);
+            IzabranaMetoda = DostupneMetode.Count > 0 ? DostupneMetode[0] : null;
+
             UcitajPodatkeCommand = new RelayCommand(_ => UcitajPodatke());
+            IzracunajCommand = new RelayCommand(_ => Izracunaj(), _ => IzabranaMetoda != null && BicikliStatistike.Count > 0);
         }
 
         private void UcitajPodatke()
@@ -72,6 +95,17 @@ namespace Komponenta2.Statistika.ViewModels
                 StatusPoruka = $"GREŠKA: {ex.Message}";
                 MessageBox.Show(ex.Message, "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void Izracunaj()
+        {
+            if (IzabranaMetoda == null) return;
+
+            obrada.SetStrategy(IzabranaMetoda);  // postavi strategiju
+            var podaci = new List<BiciklStatistika>(BicikliStatistike);
+            Rezultat = obrada.Obradi(podaci);    // Context delegira
+
+            StatusPoruka = $"Izračunato: {Rezultat.NazivMetode}";
         }
     }
 }
