@@ -1,15 +1,44 @@
 ﻿<Window x:Class="Komponenta2.Statistika.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Komponenta 2 - Statistika" Height="450" Width="800">
-    <StackPanel Margin="20">
-        <Button Content="Učitaj podatke iz Komponente 1" 
-                Click="UcitajPodatke_Click"
-                Padding="10" 
-                FontSize="14"/>
-        <TextBlock x:Name="ResultText" 
-                   Margin="0,20,0,0" 
-                   FontSize="14"
-                   TextWrapping="Wrap"/>
-    </StackPanel>
+        Title="Komponenta 2 - Statistika" Height="500" Width="900">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Toolbar -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+            <Button Content="Učitaj podatke iz Komponente 1"
+                    Command="{Binding UcitajPodatkeCommand}"
+                    Padding="10,5"
+                    FontSize="14"/>
+        </StackPanel>
+
+        <!-- DataGrid -->
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding BicikliStatistike}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Tim" Binding="{Binding Tim}" Width="*"/>
+                <DataGridTextColumn Header="Vozač" Binding="{Binding Vozac}" Width="*"/>
+                <DataGridTextColumn Header="Težina" Binding="{Binding Tezina, StringFormat=F2}" Width="80"/>
+                <DataGridCheckBoxColumn Header="Sprinter" Binding="{Binding Sprinter}" Width="80"/>
+                <DataGridTextColumn Header="Br. merenja" Binding="{Binding BrojMerenja}" Width="100"/>
+                <DataGridTextColumn Header="Pros. brzina" Binding="{Binding ProsecnaBrzina, StringFormat=F2}" Width="100"/>
+                <DataGridTextColumn Header="Pros. puls" Binding="{Binding ProsecanPuls, StringFormat=F2}" Width="100"/>
+                <DataGridTextColumn Header="Max brzina" Binding="{Binding MaxBrzina, StringFormat=F2}" Width="100"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Status -->
+        <TextBlock Grid.Row="2"
+                   Text="{Binding StatusPoruka}"
+                   Margin="0,10,0,0"
+                   FontStyle="Italic"/>
+    </Grid>
 </Window>
