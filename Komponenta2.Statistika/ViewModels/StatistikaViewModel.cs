@@ -9,6 +9,7 @@ using Komponenta2.Statistika.Services;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
+using Microsoft.Win32;
 
 
 namespace Komponenta2.Statistika.ViewModels
@@ -17,9 +18,11 @@ namespace Komponenta2.Statistika.ViewModels
     {
         private readonly IBiciklStatistikaAdapter adapter;
         private readonly StatistickaObrada obrada;
+        private readonly ICsvExporter csvExporter;
 
         public ObservableCollection<BiciklStatistika> BicikliStatistike { get; set; }
         public ObservableCollection<IStatistickaMetoda> DostupneMetode { get; set; }
+
 
         private IStatistickaMetoda izabranaMetoda;
         public IStatistickaMetoda IzabranaMetoda
@@ -56,19 +59,26 @@ namespace Komponenta2.Statistika.ViewModels
 
         public ICommand UcitajPodatkeCommand { get; }
         public ICommand IzracunajCommand { get; }
+        public ICommand ExportCsvCommand { get; }
 
-        public StatistikaViewModel(IBiciklStatistikaAdapter adapter, StatistickaObrada obrada, List<IStatistickaMetoda> metode)
-        {
-            this.adapter = adapter;
-            this.obrada = obrada;
+        public StatistikaViewModel(
+                IBiciklStatistikaAdapter adapter,
+                StatistickaObrada obrada,
+                List<IStatistickaMetoda> metode,
+                ICsvExporter csvExporter)
+                {
+                this.adapter = adapter;
+                this.obrada = obrada;
+                this.csvExporter = csvExporter;
 
-            BicikliStatistike = new ObservableCollection<BiciklStatistika>();
-            DostupneMetode = new ObservableCollection<IStatistickaMetoda>(metode);
-            IzabranaMetoda = DostupneMetode.Count > 0 ? DostupneMetode[0] : null;
+                BicikliStatistike = new ObservableCollection<BiciklStatistika>();
+                DostupneMetode = new ObservableCollection<IStatistickaMetoda>(metode);
+                IzabranaMetoda = DostupneMetode.Count > 0 ? DostupneMetode[0] : null;
 
-            UcitajPodatkeCommand = new RelayCommand(_ => UcitajPodatke());
-            IzracunajCommand = new RelayCommand(_ => Izracunaj(), _ => IzabranaMetoda != null && BicikliStatistike.Count > 0);
-        }
+                UcitajPodatkeCommand = new RelayCommand(_ => UcitajPodatke());
+                IzracunajCommand = new RelayCommand(_ => Izracunaj(), _ => IzabranaMetoda != null && BicikliStatistike.Count > 0);
+                ExportCsvCommand = new RelayCommand(_ => ExportCsv(), _ => Rezultat != null && Rezultat.Stavke.Count > 0);
+                }
 
         private void UcitajPodatke()
         {
@@ -106,6 +116,30 @@ namespace Komponenta2.Statistika.ViewModels
             Rezultat = obrada.Obradi(podaci);    // Context delegira
 
             StatusPoruka = $"Izračunato: {Rezultat.NazivMetode}";
+        }
+
+        private void ExportCsv()
+        {
+            var dialog = new SaveFileDialog
+            {
+                Filter = "CSV fajl (*.csv)|*.csv",
+                FileName = $"statistika_{Rezultat.NazivMetode}.csv"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                try
+                {
+                    csvExporter.Export(Rezultat, dialog.FileName);
+                    StatusPoruka = $"Sačuvano u: {dialog.FileName}";
+                    MessageBox.Show("CSV fajl je uspešno sačuvan.", "Uspeh", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    StatusPoruka = $"GREŠKA pri čuvanju: {ex.Message}";
+                    MessageBox.Show(ex.Message, "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }

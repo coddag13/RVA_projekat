@@ -26,6 +26,7 @@ namespace Komponenta2.Statistika
             InitializeComponent();
 
             IBiciklStatistikaAdapter adapter = new BiciklStatistikaAdapter();
+            ICsvExporter csvExporter = new CsvExporter();
 
             var metode = new List<IStatistickaMetoda>
             {
@@ -34,10 +35,9 @@ namespace Komponenta2.Statistika
                 new MinMaxStatistika()
             };
 
-            // Pocetna strategija — moze i null pa se setuje kroz SetStrategy
             StatistickaObrada obrada = new StatistickaObrada(metode[0]);
 
-            DataContext = new StatistikaViewModel(adapter, obrada, metode);
+            DataContext = new StatistikaViewModel(adapter, obrada, metode, csvExporter);
         }
     }
 }

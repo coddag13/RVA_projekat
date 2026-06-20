@@ -35,6 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Win32.Registry, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceModel" />
@@ -57,10 +58,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Interfaces\IBiciklStatistikaAdapter.cs" />
+    <Compile Include="Interfaces\ICsvExporter.cs" />
     <Compile Include="Interfaces\IStatistickaMetoda.cs" />
     <Compile Include="Models\BicikliStatistika.cs" />
     <Compile Include="Models\StatistikaRezultat.cs" />
     <Compile Include="Services\BiciklStatistikaAdapter.cs" />
+    <Compile Include="Services\CsvExporter.cs" />
     <Compile Include="Services\Komponenta1Client.cs" />
     <Compile Include="Services\MedianaStatistika.cs" />
     <Compile Include="Services\MinMaxStatistika.cs" />

@@ -50,6 +50,11 @@
                     Margin="10,0,0,0"
                     Padding="15,5"
                     FontSize="14"/>
+            <Button Content="Eksportuj u CSV"
+                    Command="{Binding ExportCsvCommand}"
+                    Margin="10,0,0,0"
+                    Padding="15,5"
+                    FontSize="14"/>
         </StackPanel>
 
         <!-- Rezultat -->
