@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.Serialization;
 
 namespace RVA.Shared.Models
 {
+    [DataContract]
     public class BiciklistickaTelemetrija
     {
-        public Guid BiciklId { get; set; }
-        public DateTime VremeOcitavanja { get; set; }
-        public double BrzinaVoznje { get; set; }
-        public double PulsVozaca { get; set; }
-        public StanjeVoznje Stanje { get; set; }
+        [DataMember] public Guid BiciklId { get; set; }
+        [DataMember] public DateTime VremeOcitavanja { get; set; }
+        [DataMember] public double BrzinaVoznje { get; set; }
+        [DataMember] public double PulsVozaca { get; set; }
+        [DataMember] public StanjeVoznje Stanje { get; set; }
 
         public BiciklistickaTelemetrija()
         {

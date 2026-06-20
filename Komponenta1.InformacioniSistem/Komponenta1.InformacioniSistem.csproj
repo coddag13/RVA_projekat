@@ -88,6 +88,7 @@
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Text.Encodings.Web, Version=10.0.0.9, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.Encodings.Web.10.0.9\lib\net462\System.Text.Encodings.Web.dll</HintPath>
@@ -126,6 +127,7 @@
     <Compile Include="Commands\UpdateBiciklCommand.cs" />
     <Compile Include="Commands\UpdateTelemetrijaCommand.cs" />
     <Compile Include="Services\BiciklService.cs" />
+    <Compile Include="Services\Komponenta1Service.cs" />
     <Compile Include="Services\TelemetrijaService.cs" />
     <Compile Include="Services\TextFileLogger.cs" />
     <Compile Include="Services\ValidationService.cs" />

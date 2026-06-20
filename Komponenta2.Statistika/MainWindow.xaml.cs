@@ -12,17 +12,33 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Komponenta2.Statistika.Services;
 
 namespace Komponenta2.Statistika
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void UcitajPodatke_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                using (var client = new Komponenta1Client())
+                {
+                    var bicikli = client.GetBicikli();
+                    var telemetrije = client.GetTelemetrije();
+
+                    ResultText.Text = $"Učitano: {bicikli.Count} bicikala, {telemetrije.Count} telemetrija.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ResultText.Text = $"GREŠKA: {ex.Message}";
+            }
         }
     }
 }

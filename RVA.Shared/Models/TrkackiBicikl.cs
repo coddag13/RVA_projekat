@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Runtime.Serialization;
 
 namespace RVA.Shared.Models
 {
+    [DataContract]
     public class TrkackiBicikl
     {
-        public Guid Id { get; set; }
-        public string Tim { get; set; }
-        public string Vozac { get; set; }
-        public double Tezina { get; set; }
-        public bool Sprinter { get; set; }
+        [DataMember] public Guid Id { get; set; }
+        [DataMember] public string Tim { get; set; }
+        [DataMember] public string Vozac { get; set; }
+        [DataMember] public double Tezina { get; set; }
+        [DataMember] public bool Sprinter { get; set; }
 
         public TrkackiBicikl()
         {
@@ -34,4 +36,3 @@ namespace RVA.Shared.Models
         }
     }
 }
-

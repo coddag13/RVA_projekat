@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.ServiceModel;
 using System.Windows;
+using RVA.Shared.Contracts;
 using RVA.Shared.Models;
 
 namespace Komponenta1.InformacioniSistem
@@ -9,6 +11,7 @@ namespace Komponenta1.InformacioniSistem
     {
         private readonly IDataStorage dataStorage;
         private readonly DataStore dataStore;
+        private ServiceHost wcfHost;
 
         public MainWindow()
         {
@@ -17,6 +20,8 @@ namespace Komponenta1.InformacioniSistem
             string dataFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
             string dataFilePath = Path.Combine(dataFolder, "podaci.xml");
             string logFilePath = Path.Combine(dataFolder, "aktivnosti.txt");
+
+
 
             dataStorage = new XmlDataStorage(dataFilePath);
             dataStore = dataStorage.Load();
@@ -49,6 +54,29 @@ namespace Komponenta1.InformacioniSistem
 
             dataStorage.Save(dataStore);
             logger.Log("Pokrenuta Komponenta 1 - Informacioni sistem.");
+
+            // WCF HOST
+            StartWcfHost(biciklService, telemetrijaService, logger);
+
+            this.Closed += (s, e) => wcfHost?.Close();
         }
+
+        private void StartWcfHost(IBiciklService biciklService, ITelemetrijaService telemetrijaService, ILogger logger)
+        {
+            try
+            {
+                var wcfService = new Komponenta1Service(biciklService, telemetrijaService);
+                wcfHost = new ServiceHost(wcfService, new Uri("net.tcp://localhost:8000/Komponenta1Service"));
+                wcfHost.AddServiceEndpoint(typeof(IKomponenta1Service), new NetTcpBinding(SecurityMode.None), "");
+                wcfHost.Open();
+                logger.Log("WCF servis pokrenut na net.tcp://localhost:8000/Komponenta1Service");
+            }
+            catch (Exception ex)
+            {
+                logger.Log($"Greska pri pokretanju WCF servisa: {ex.Message}");
+                MessageBox.Show($"WCF host nije pokrenut: {ex.Message}", "Upozorenje", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
+
     }
 }
