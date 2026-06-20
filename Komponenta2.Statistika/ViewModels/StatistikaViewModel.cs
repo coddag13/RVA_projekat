@@ -1,15 +1,17 @@
-﻿using System;
+﻿using Komponenta2.Statistika.Interfaces;
+using Komponenta2.Statistika.Models;
+using Komponenta2.Statistika.Services;
+using Microsoft.Win32;
+using RVA.Shared.Models;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Komponenta2.Statistika.Interfaces;
-using Komponenta2.Statistika.Models;
-using Komponenta2.Statistika.Services;
-using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
-using Microsoft.Win32;
+using Komponenta2.Statistika.Helpers;
 
 
 namespace Komponenta2.Statistika.ViewModels
@@ -66,44 +68,61 @@ namespace Komponenta2.Statistika.ViewModels
                 StatistickaObrada obrada,
                 List<IStatistickaMetoda> metode,
                 ICsvExporter csvExporter)
-                {
-                this.adapter = adapter;
-                this.obrada = obrada;
-                this.csvExporter = csvExporter;
+            {
+                    this.adapter = adapter;
+                    this.obrada = obrada;
+                    this.csvExporter = csvExporter;
 
-                BicikliStatistike = new ObservableCollection<BiciklStatistika>();
-                DostupneMetode = new ObservableCollection<IStatistickaMetoda>(metode);
-                IzabranaMetoda = DostupneMetode.Count > 0 ? DostupneMetode[0] : null;
+                    BicikliStatistike = new ObservableCollection<BiciklStatistika>();
+                    DostupneMetode = new ObservableCollection<IStatistickaMetoda>(metode);
+                    IzabranaMetoda = DostupneMetode.Count > 0 ? DostupneMetode[0] : null;
 
-                UcitajPodatkeCommand = new RelayCommand(_ => UcitajPodatke());
-                IzracunajCommand = new RelayCommand(_ => Izracunaj(), _ => IzabranaMetoda != null && BicikliStatistike.Count > 0);
-                ExportCsvCommand = new RelayCommand(_ => ExportCsv(), _ => Rezultat != null && Rezultat.Stavke.Count > 0);
-                }
+                    UcitajPodatkeCommand = new RelayCommand(_ => UcitajPodatke());
+                    IzracunajCommand = new RelayCommand(_ => Izracunaj(), _ => IzabranaMetoda != null && BicikliStatistike.Count > 0);
+                    ExportCsvCommand = new RelayCommand(_ => ExportCsv(), _ => Rezultat != null && Rezultat.Stavke.Count > 0);
+
+                    UcitajPodatke();
+
+            }
 
         private void UcitajPodatke()
         {
+            List<TrkackiBicikl> bicikli;
+            List<BiciklistickaTelemetrija> telemetrije;
+            bool koristiDefault = false;
+
             try
             {
                 using (var client = new Komponenta1Client())
                 {
-                    var bicikli = client.GetBicikli();
-                    var telemetrije = client.GetTelemetrije();
-
-                    var statistike = adapter.Adapt(bicikli, telemetrije);
-
-                    BicikliStatistike.Clear();
-                    foreach (var s in statistike)
-                    {
-                        BicikliStatistike.Add(s);
-                    }
-
-                    StatusPoruka = $"Učitano {statistike.Count} bicikala.";
+                    bicikli = client.GetBicikli();
+                    telemetrije = client.GetTelemetrije();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                StatusPoruka = $"GREŠKA: {ex.Message}";
-                MessageBox.Show(ex.Message, "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                // Komponenta 1 nije dostupna — koristi default podatke
+                var (defBicikli, defTelemetrije) = SeedDataHelper.DobijDefaultPodatke();
+                bicikli = defBicikli;
+                telemetrije = defTelemetrije;
+                koristiDefault = true;
+            }
+
+            var statistike = adapter.Adapt(bicikli, telemetrije);
+
+            BicikliStatistike.Clear();
+            foreach (var s in statistike)
+            {
+                BicikliStatistike.Add(s);
+            }
+
+            if (koristiDefault)
+            {
+                StatusPoruka = $"Komponenta 1 nije dostupna - učitano {statistike.Count} default bicikala.";
+            }
+            else
+            {
+                StatusPoruka = $"Učitano {statistike.Count} bicikala iz Komponente 1.";
             }
         }
 
