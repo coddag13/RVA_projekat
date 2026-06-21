@@ -14,6 +14,7 @@ using System.Windows.Input;
 using Komponenta2.Statistika.Helpers;
 
 
+
 namespace Komponenta2.Statistika.ViewModels
 {
     public class StatistikaViewModel : ViewModelBase
@@ -21,6 +22,7 @@ namespace Komponenta2.Statistika.ViewModels
         private readonly IBiciklStatistikaAdapter adapter;
         private readonly StatistickaObrada obrada;
         private readonly ICsvExporter csvExporter;
+        private readonly ILogger logger;
 
         public ObservableCollection<BiciklStatistika> BicikliStatistike { get; set; }
         public ObservableCollection<IStatistickaMetoda> DostupneMetode { get; set; }
@@ -67,11 +69,13 @@ namespace Komponenta2.Statistika.ViewModels
                 IBiciklStatistikaAdapter adapter,
                 StatistickaObrada obrada,
                 List<IStatistickaMetoda> metode,
-                ICsvExporter csvExporter)
+                ICsvExporter csvExporter,
+                ILogger logger)
             {
                     this.adapter = adapter;
                     this.obrada = obrada;
                     this.csvExporter = csvExporter;
+                    this.logger = logger;
 
                     BicikliStatistike = new ObservableCollection<BiciklStatistika>();
                     DostupneMetode = new ObservableCollection<IStatistickaMetoda>(metode);
@@ -80,9 +84,9 @@ namespace Komponenta2.Statistika.ViewModels
                     UcitajPodatkeCommand = new RelayCommand(_ => UcitajPodatke());
                     IzracunajCommand = new RelayCommand(_ => Izracunaj(), _ => IzabranaMetoda != null && BicikliStatistike.Count > 0);
                     ExportCsvCommand = new RelayCommand(_ => ExportCsv(), _ => Rezultat != null && Rezultat.Stavke.Count > 0);
-
+                    
+                    logger.Log("Komponenta 2 - Statistika pokrenuta.");
                     UcitajPodatke();
-
             }
 
         private void UcitajPodatke()
@@ -98,14 +102,15 @@ namespace Komponenta2.Statistika.ViewModels
                     bicikli = client.GetBicikli();
                     telemetrije = client.GetTelemetrije();
                 }
+                logger.Log($"Učitano {bicikli.Count} bicikala i {telemetrije.Count} telemetrija iz Komponente 1.");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Komponenta 1 nije dostupna — koristi default podatke
                 var (defBicikli, defTelemetrije) = SeedDataHelper.DobijDefaultPodatke();
                 bicikli = defBicikli;
                 telemetrije = defTelemetrije;
                 koristiDefault = true;
+                logger.Log($"Komponenta 1 nedostupna ({ex.Message}). Učitani default podaci.");
             }
 
             var statistike = adapter.Adapt(bicikli, telemetrije);
@@ -130,11 +135,12 @@ namespace Komponenta2.Statistika.ViewModels
         {
             if (IzabranaMetoda == null) return;
 
-            obrada.SetStrategy(IzabranaMetoda);  // postavi strategiju
+            obrada.SetStrategy(IzabranaMetoda);
             var podaci = new List<BiciklStatistika>(BicikliStatistike);
-            Rezultat = obrada.Obradi(podaci);    // Context delegira
+            Rezultat = obrada.Obradi(podaci);
 
             StatusPoruka = $"Izračunato: {Rezultat.NazivMetode}";
+            logger.Log($"Izvršena statistička obrada metodom: {Rezultat.NazivMetode}. Broj rezultata: {Rezultat.Stavke.Count}");
         }
 
         private void ExportCsv()
@@ -151,11 +157,13 @@ namespace Komponenta2.Statistika.ViewModels
                 {
                     csvExporter.Export(Rezultat, dialog.FileName);
                     StatusPoruka = $"Sačuvano u: {dialog.FileName}";
+                    logger.Log($"Rezultat statistike ({Rezultat.NazivMetode}) eksportovan u CSV: {dialog.FileName}");
                     MessageBox.Show("CSV fajl je uspešno sačuvan.", "Uspeh", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
                     StatusPoruka = $"GREŠKA pri čuvanju: {ex.Message}";
+                    logger.Log($"GREŠKA pri eksportovanju CSV: {ex.Message}");
                     MessageBox.Show(ex.Message, "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
