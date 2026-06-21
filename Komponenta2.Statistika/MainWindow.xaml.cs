@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Komponenta2.Statistika.ViewModels;
+using System.IO;
 
 
 namespace Komponenta2.Statistika
@@ -24,20 +25,6 @@ namespace Komponenta2.Statistika
         public MainWindow()
         {
             InitializeComponent();
-
-            IBiciklStatistikaAdapter adapter = new BiciklStatistikaAdapter();
-            ICsvExporter csvExporter = new CsvExporter();
-
-            var metode = new List<IStatistickaMetoda>
-            {
-                new ProsekStatistika(),
-                new MedianaStatistika(),
-                new MinMaxStatistika()
-            };
-
-            StatistickaObrada obrada = new StatistickaObrada(metode[0]);
-
-            DataContext = new StatistikaViewModel(adapter, obrada, metode, csvExporter);
         }
     }
 }

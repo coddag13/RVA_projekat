@@ -60,6 +60,8 @@
     <Compile Include="Helpers\SeedDataHelper.cs" />
     <Compile Include="Interfaces\IBiciklStatistikaAdapter.cs" />
     <Compile Include="Interfaces\ICsvExporter.cs" />
+    <Compile Include="Interfaces\ILogger.cs" />
+    <Compile Include="Interfaces\IPodaciProvider.cs" />
     <Compile Include="Interfaces\IStatistickaMetoda.cs" />
     <Compile Include="Models\BicikliStatistika.cs" />
     <Compile Include="Models\StatistikaRezultat.cs" />
@@ -70,6 +72,7 @@
     <Compile Include="Services\MinMaxStatistika.cs" />
     <Compile Include="Services\ProsekStatistika.cs" />
     <Compile Include="Services\StatistickaObrada.cs" />
+    <Compile Include="Services\TextFileLoggeer.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\StatistikaViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />

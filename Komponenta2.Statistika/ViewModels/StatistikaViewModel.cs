@@ -23,6 +23,7 @@ namespace Komponenta2.Statistika.ViewModels
         private readonly StatistickaObrada obrada;
         private readonly ICsvExporter csvExporter;
         private readonly ILogger logger;
+        private readonly IPodaciProvider podaciProvider;
 
         public ObservableCollection<BiciklStatistika> BicikliStatistike { get; set; }
         public ObservableCollection<IStatistickaMetoda> DostupneMetode { get; set; }
@@ -66,28 +67,30 @@ namespace Komponenta2.Statistika.ViewModels
         public ICommand ExportCsvCommand { get; }
 
         public StatistikaViewModel(
-                IBiciklStatistikaAdapter adapter,
-                StatistickaObrada obrada,
-                List<IStatistickaMetoda> metode,
-                ICsvExporter csvExporter,
-                ILogger logger)
-            {
-                    this.adapter = adapter;
-                    this.obrada = obrada;
-                    this.csvExporter = csvExporter;
-                    this.logger = logger;
+            IBiciklStatistikaAdapter adapter,
+            StatistickaObrada obrada,
+            List<IStatistickaMetoda> metode,
+            ICsvExporter csvExporter,
+            ILogger logger,
+            IPodaciProvider podaciProvider)
+        {
+            this.adapter = adapter;
+            this.obrada = obrada;
+            this.csvExporter = csvExporter;
+            this.logger = logger;
+            this.podaciProvider = podaciProvider;
 
-                    BicikliStatistike = new ObservableCollection<BiciklStatistika>();
-                    DostupneMetode = new ObservableCollection<IStatistickaMetoda>(metode);
-                    IzabranaMetoda = DostupneMetode.Count > 0 ? DostupneMetode[0] : null;
+            BicikliStatistike = new ObservableCollection<BiciklStatistika>();
+            DostupneMetode = new ObservableCollection<IStatistickaMetoda>(metode);
+            IzabranaMetoda = DostupneMetode.Count > 0 ? DostupneMetode[0] : null;
 
-                    UcitajPodatkeCommand = new RelayCommand(_ => UcitajPodatke());
-                    IzracunajCommand = new RelayCommand(_ => Izracunaj(), _ => IzabranaMetoda != null && BicikliStatistike.Count > 0);
-                    ExportCsvCommand = new RelayCommand(_ => ExportCsv(), _ => Rezultat != null && Rezultat.Stavke.Count > 0);
-                    
-                    logger.Log("Komponenta 2 - Statistika pokrenuta.");
-                    UcitajPodatke();
-            }
+            UcitajPodatkeCommand = new RelayCommand(_ => UcitajPodatke());
+            IzracunajCommand = new RelayCommand(_ => Izracunaj(), _ => IzabranaMetoda != null && BicikliStatistike.Count > 0);
+            ExportCsvCommand = new RelayCommand(_ => ExportCsv(), _ => Rezultat != null && Rezultat.Stavke.Count > 0);
+
+            logger.Log("Komponenta 2 - Statistika pokrenuta.");
+            UcitajPodatke();
+        }
 
         private void UcitajPodatke()
         {
@@ -97,11 +100,8 @@ namespace Komponenta2.Statistika.ViewModels
 
             try
             {
-                using (var client = new Komponenta1Client())
-                {
-                    bicikli = client.GetBicikli();
-                    telemetrije = client.GetTelemetrije();
-                }
+                bicikli = podaciProvider.GetBicikli();
+                telemetrije = podaciProvider.GetTelemetrije();
                 logger.Log($"Učitano {bicikli.Count} bicikala i {telemetrije.Count} telemetrija iz Komponente 1.");
             }
             catch (Exception ex)

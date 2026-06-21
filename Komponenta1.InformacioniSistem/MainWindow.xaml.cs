@@ -17,6 +17,7 @@ namespace Komponenta1.InformacioniSistem
         {
             InitializeComponent();
 
+
             string dataFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
             string dataFilePath = Path.Combine(dataFolder, "podaci.xml");
             string logFilePath = Path.Combine(dataFolder, "aktivnosti.txt");

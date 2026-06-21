@@ -3,10 +3,11 @@ using RVA.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using Komponenta2.Statistika.Interfaces;
 
 namespace Komponenta2.Statistika.Services
 {
-    public class Komponenta1Client : IDisposable
+    public class Komponenta1Client : IPodaciProvider, IDisposable
     {
         private readonly ChannelFactory<IKomponenta1Service> channelFactory;
         private IKomponenta1Service proxy;
