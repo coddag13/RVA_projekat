@@ -1,90 +1,291 @@
 ﻿<Window x:Class="Komponenta2.Statistika.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Komponenta 2 - Statistika" Height="600" Width="950">
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Peloton Pulse - Statistika"
+        Height="760"
+        Width="1180"
+        MinHeight="680"
+        MinWidth="1040"
+        WindowStartupLocation="CenterScreen"
+        Background="#FFF7EF">
 
-        <!-- Toolbar -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-            <Button Content="Učitaj podatke iz Komponente 1"
-                    Command="{Binding UcitajPodatkeCommand}"
-                    Padding="10,5"
-                    FontSize="14"/>
-        </StackPanel>
+    <Window.Resources>
+        <SolidColorBrush x:Key="BojaPozadine" Color="#FFF7EF"/>
+        <SolidColorBrush x:Key="BojaKartice" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="BojaPeach" Color="#FFDAB9"/>
+        <SolidColorBrush x:Key="BojaTeksta" Color="#263238"/>
+        <SolidColorBrush x:Key="BojaTeal" Color="#2F6F73"/>
+        <SolidColorBrush x:Key="BojaSage" Color="#6B8F71"/>
+        <SolidColorBrush x:Key="BojaCoral" Color="#E76F51"/>
+        <SolidColorBrush x:Key="BojaAmber" Color="#F4A261"/>
+        <SolidColorBrush x:Key="BojaIvica" Color="#E8D7C3"/>
 
-        <!-- DataGrid sa biciklima -->
-        <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding BicikliStatistike}"
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="False"
-                  IsReadOnly="True">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Tim" Binding="{Binding Tim}" Width="*"/>
-                <DataGridTextColumn Header="Vozač" Binding="{Binding Vozac}" Width="*"/>
-                <DataGridTextColumn Header="Težina" Binding="{Binding Tezina, StringFormat=F2}" Width="80"/>
-                <DataGridCheckBoxColumn Header="Sprinter" Binding="{Binding Sprinter}" Width="80"/>
-                <DataGridTextColumn Header="Br. merenja" Binding="{Binding BrojMerenja}" Width="100"/>
-                <DataGridTextColumn Header="Pros. brzina" Binding="{Binding ProsecnaBrzina, StringFormat=F2}" Width="100"/>
-                <DataGridTextColumn Header="Pros. puls" Binding="{Binding ProsecanPuls, StringFormat=F2}" Width="100"/>
-                <DataGridTextColumn Header="Max brzina" Binding="{Binding MaxBrzina, StringFormat=F2}" Width="100"/>
-            </DataGrid.Columns>
-        </DataGrid>
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource BojaTeksta}"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+        </Style>
 
-        <!-- Izbor metode -->
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,15,0,0">
-            <TextBlock Text="Statistička metoda:" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="14"/>
-            <ComboBox ItemsSource="{Binding DostupneMetode}"
-                      SelectedItem="{Binding IzabranaMetoda}"
-                      DisplayMemberPath="Naziv"
-                      Width="200"
-                      FontSize="14"/>
-            <Button Content="Izračunaj"
-                    Command="{Binding IzracunajCommand}"
-                    Margin="10,0,0,0"
-                    Padding="15,5"
-                    FontSize="14"/>
-            <Button Content="Eksportuj u CSV"
-                    Command="{Binding ExportCsvCommand}"
-                    Margin="10,0,0,0"
-                    Padding="15,5"
-                    FontSize="14"/>
-        </StackPanel>
+        <Style TargetType="Button">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="MinWidth" Value="92"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="12,4"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="{StaticResource BojaTeal}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BojaTeal}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
 
-        <!-- Rezultat -->
-        <Border Grid.Row="3" BorderBrush="Gray" BorderThickness="1" Margin="0,10,0,0" Padding="10">
-            <StackPanel>
-                <TextBlock Text="{Binding Rezultat.NazivMetode, StringFormat='Rezultat - {0}'}"
-                           FontWeight="Bold"
-                           FontSize="14"
-                           Margin="0,0,0,5"/>
-                <ItemsControl ItemsSource="{Binding Rezultat.Stavke}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="0,2">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="120"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="{Binding Opis}"/>
-                                <TextBlock Grid.Column="1" Text="{Binding Vrednost, StringFormat=F2}" TextAlignment="Right" FontWeight="SemiBold"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </StackPanel>
+        <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource BojaSage}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BojaSage}"/>
+        </Style>
+
+        <Style x:Key="WarnButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{StaticResource BojaAmber}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BojaAmber}"/>
+            <Setter Property="Foreground" Value="#263238"/>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BojaIvica}"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="Margin" Value="0,12,0,0"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BojaIvica}"/>
+            <Setter Property="RowBackground" Value="#FFFFFF"/>
+            <Setter Property="AlternatingRowBackground" Value="#FFF3E7"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="270"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- SIDEBAR -->
+        <Border Grid.Column="0"
+                Background="#FFDAB9"
+                BorderBrush="#E8D7C3"
+                BorderThickness="0,0,1,0">
+            <DockPanel Margin="20">
+                <StackPanel DockPanel.Dock="Top">
+                    <TextBlock Text="Peloton Pulse"
+                               FontSize="28"
+                               FontWeight="Bold"
+                               Margin="0,8,0,2"/>
+
+                    <TextBlock Text="Statisticki centar"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Foreground="#2F6F73"
+                               Margin="0,0,0,28"/>
+
+                    <Border Background="#FFF7EF"
+                            BorderBrush="#E8D7C3"
+                            BorderThickness="1"
+                            Padding="14"
+                            Margin="0,0,0,14">
+                        <StackPanel>
+                            <TextBlock Text="Izvor podataka"
+                                       FontWeight="Bold"
+                                       Margin="0,0,0,8"/>
+                            <TextBlock Text="WCF veza ka Komponenti 1"
+                                       FontSize="12"
+                                       Opacity="0.85"/>
+                            <TextBlock Text="Fallback na lokalne podatke"
+                                       FontSize="12"
+                                       Opacity="0.85"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Background="#2F6F73"
+                            Padding="14"
+                            Margin="0,0,0,14">
+                        <StackPanel>
+                            <TextBlock Text="Stanje sistema"
+                                       Foreground="White"
+                                       FontWeight="Bold"
+                                       Margin="0,0,0,8"/>
+                            <TextBlock Text="{Binding StatusPoruka}"
+                                       Foreground="White"
+                                       FontSize="12"
+                                       Opacity="0.9"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Background="#FFF3E7"
+                            BorderBrush="#E8D7C3"
+                            BorderThickness="1"
+                            Padding="14">
+                        <StackPanel>
+                            <TextBlock Text="Statisticke metode"
+                                       FontWeight="Bold"
+                                       Margin="0,0,0,8"/>
+                            <TextBlock Text="Prosek"
+                                       FontSize="12"
+                                       Opacity="0.85"/>
+                            <TextBlock Text="Medijana"
+                                       FontSize="12"
+                                       Opacity="0.85"/>
+                            <TextBlock Text="Min / Max"
+                                       FontSize="12"
+                                       Opacity="0.85"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <StackPanel DockPanel.Dock="Bottom">
+                    <Border Background="#FFF7EF"
+                            BorderBrush="#E8D7C3"
+                            BorderThickness="1"
+                            Padding="12">
+                        <StackPanel>
+                            <TextBlock Text="Eksport rezultata"
+                                       FontWeight="Bold"/>
+                            <TextBlock Text="Cuvanje statistike u CSV format"
+                                       FontSize="12"
+                                       Opacity="0.8"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </DockPanel>
         </Border>
 
-        <!-- Status -->
-        <TextBlock Grid.Row="4"
-                   Text="{Binding StatusPoruka}"
-                   Margin="0,10,0,0"
-                   FontStyle="Italic"/>
+        <!-- MAIN CONTENT -->
+        <Grid Grid.Column="1" Margin="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <DockPanel Grid.Row="0" Margin="0,0,0,18">
+                <Button DockPanel.Dock="Right"
+                        Content="Ucitaj podatke"
+                        Command="{Binding UcitajPodatkeCommand}"
+                        Style="{StaticResource SecondaryButton}"
+                        MinWidth="140"
+                        Margin="12,8,0,0"/>
+
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="Statisticka obrada"
+                               FontSize="30"
+                               FontWeight="Bold"/>
+                    <TextBlock Text="Pregled bicikala i izracunavanje statistickih metrika"
+                               FontSize="14"
+                               Opacity="0.75"/>
+                </StackPanel>
+            </DockPanel>
+
+            <!-- DataGrid -->
+            <Border Grid.Row="1"
+                    Background="White"
+                    BorderBrush="#E8D7C3"
+                    BorderThickness="1"
+                    Padding="18">
+                <DataGrid ItemsSource="{Binding BicikliStatistike}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Tim" Binding="{Binding Tim}" Width="*"/>
+                        <DataGridTextColumn Header="Vozac" Binding="{Binding Vozac}" Width="*"/>
+                        <DataGridTextColumn Header="Tezina" Binding="{Binding Tezina, StringFormat=F2}" Width="80"/>
+                        <DataGridCheckBoxColumn Header="Sprinter" Binding="{Binding Sprinter}" Width="80"/>
+                        <DataGridTextColumn Header="Br. merenja" Binding="{Binding BrojMerenja}" Width="100"/>
+                        <DataGridTextColumn Header="Pros. brzina" Binding="{Binding ProsecnaBrzina, StringFormat=F2}" Width="110"/>
+                        <DataGridTextColumn Header="Pros. puls" Binding="{Binding ProsecanPuls, StringFormat=F2}" Width="100"/>
+                        <DataGridTextColumn Header="Max brzina" Binding="{Binding MaxBrzina, StringFormat=F2}" Width="100"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+
+            <!-- Donji panel: metoda + rezultat -->
+            <Grid Grid.Row="2" Margin="0,18,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1.4*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Izbor metode -->
+                <Border Grid.Column="0"
+                        Background="#FFF7EF"
+                        BorderBrush="#E8D7C3"
+                        BorderThickness="1"
+                        Padding="18"
+                        Margin="0,0,14,0">
+                    <StackPanel>
+                        <TextBlock Text="Statisticka metoda"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,10"/>
+
+                        <ComboBox ItemsSource="{Binding DostupneMetode}"
+                                  SelectedItem="{Binding IzabranaMetoda}"
+                                  DisplayMemberPath="Naziv"/>
+
+                        <WrapPanel Margin="0,10,0,0">
+                            <Button Content="Izracunaj"
+                                    Command="{Binding IzracunajCommand}"/>
+                            <Button Content="Eksportuj u CSV"
+                                    Command="{Binding ExportCsvCommand}"
+                                    Style="{StaticResource WarnButton}"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Rezultat -->
+                <Border Grid.Column="1"
+                        Background="White"
+                        BorderBrush="#E8D7C3"
+                        BorderThickness="1"
+                        Padding="18">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Rezultat.NazivMetode, StringFormat='Rezultat - {0}'}"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,10"/>
+
+                        <ItemsControl ItemsSource="{Binding Rezultat.Stavke}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#FFF3E7"
+                                            BorderBrush="#E8D7C3"
+                                            BorderThickness="1"
+                                            Padding="10"
+                                            Margin="0,0,0,8">
+                                        <DockPanel>
+                                            <TextBlock DockPanel.Dock="Right"
+                                                       Text="{Binding Vrednost, StringFormat=F2}"
+                                                       FontSize="18"
+                                                       FontWeight="Bold"
+                                                       Foreground="#2F6F73"/>
+                                            <TextBlock Text="{Binding Opis}"
+                                                       VerticalAlignment="Center"/>
+                                        </DockPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>
