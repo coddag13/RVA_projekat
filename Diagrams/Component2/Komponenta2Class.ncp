@@ -1,0 +1,497 @@
+<Project>
+  <Name>ClassDiagram</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>ClassDiagram</Name>
+    <Language>CSharp</Language>
+    <Entities>
+      <Entity type="Class">
+        <Name>BicikllStatistika</Name>
+        <Access>Public</Access>
+        <Location left="1243" top="10" />
+        <Size width="305" height="264" />
+        <Collapsed>False</Collapsed>
+        <Member type="Property">public string Tim { get; set; }</Member>
+        <Member type="Property">public int BrojMerenja { get; }</Member>
+        <Member type="Property">public double ProsecnaBrzina { get; }</Member>
+        <Member type="Property">public string Vozac { get; set; }</Member>
+        <Member type="Property">public double ProsecanPuls { get; }</Member>
+        <Member type="Property">public double MaxBrzina { get; }</Member>
+        <Member type="Property">public double MaxPuls { get; }</Member>
+        <Member type="Property">public List&lt;BiciklistickaTelemetrija&gt; Telemetrije { get; set; }</Member>
+        <Member type="Property">public double Tezina { get; set; }</Member>
+        <Member type="Property">public bool Sprinter { get; set; }</Member>
+        <Member type="Constructor">public BicikllStatistika()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>StatistikaRezultat</Name>
+        <Access>Public</Access>
+        <Location left="1916" top="42" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Constructor">public StatistikaRezultat()</Member>
+        <Member type="Property">public string NazivMetode { get; set; }</Member>
+        <Member type="Property">public List&lt;StavkaRezultata&gt; Stavke { get; set; }</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>StavkaRezultata</Name>
+        <Access>Public</Access>
+        <Location left="2155" top="42" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Property">public string Opis { get; set; }</Member>
+        <Member type="Property">public double Vrednost { get; set; }</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>BiciklistickaTelemetrija</Name>
+        <Access>Public</Access>
+        <Location left="947" top="37" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Property">public Guid BiciklId { get; set; }</Member>
+        <Member type="Property">public DateTime VremeOcitavanja { get; set; }</Member>
+        <Member type="Property">public double BrzinaVoznje { get; set; }</Member>
+        <Member type="Property">public double PulsVozaca { get; set; }</Member>
+        <Member type="Property">public StanjeVoznje Stanje { get; set; }</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Enum">
+        <Name>StanjeVoznje</Name>
+        <Access>Public</Access>
+        <Location left="758" top="37" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Value>Stabilna</Value>
+        <Value>VelikiNapori</Value>
+        <Value>Umor</Value>
+        <Value>Odustajanje</Value>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IPodaciProvider</Name>
+        <Access>Public</Access>
+        <Location left="1230" top="607" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">List&lt;TrkackiBicikl&gt; GetBicikli()</Member>
+        <Member type="Method">List&lt;BiciklistickaTelemetrija&gt; GetTelemetrija()</Member>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IStatistickaMeteoda</Name>
+        <Access>Public</Access>
+        <Location left="1904" top="362" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">StatistikaRezultat Izracunaj(List&lt;BiciklStatistika&gt; podaci)</Member>
+        <Member type="Property">string Naziv { get; }</Member>
+      </Entity>
+      <Entity type="Interface">
+        <Name>ILogger</Name>
+        <Access>Public</Access>
+        <Location left="990" top="607" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">void Log(string poruka)</Member>
+      </Entity>
+      <Entity type="Interface">
+        <Name>ICsvExporter</Name>
+        <Access>Public</Access>
+        <Location left="1440" top="607" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">void Export(StatistikaRezultat rezultat, string path)</Member>
+      </Entity>
+      <Entity type="Interface">
+        <Name>IBIciklStatistikaAdapter</Name>
+        <Access>Public</Access>
+        <Location left="1661" top="607" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">List&lt;BicikliStatistika&gt; Adapt(List&lt;TrkackiBicikl&gt; bicikli, LIst&lt;BiciklistickaTelemetrija&gt; telemetrije)</Member>
+      </Entity>
+      <Entity type="Class">
+        <Name>BiciklStatistikaAdapter</Name>
+        <Access>Public</Access>
+        <Location left="1661" top="362" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public List&lt;BicikliStatistika&gt; Adapt(List&lt;TrkackiBicikl&gt; bicikli, LIst&lt;BiciklistickaTelemetrija&gt; telemetrije)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>CsvExporter</Name>
+        <Access>Public</Access>
+        <Location left="1440" top="362" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public void Export(StatistikaRezultat rezultat, string path)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Komponenta1Client</Name>
+        <Access>Public</Access>
+        <Location left="1230" top="325" />
+        <Size width="162" height="257" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly ChanelFactory&lt;Komponenta1Client&gt; chanelFactory</Member>
+        <Member type="Field">private IKomponenta1Service proxy</Member>
+        <Member type="Constructor">public Komponenta1Client()</Member>
+        <Member type="Method">public List&lt;TrkackiBicikl&gt; GetBicikli()</Member>
+        <Member type="Method">public List&lt;BiciklistickaTelemetrijal&gt; GetTelemetrije()</Member>
+        <Member type="Method">public void Dispose()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>MedianaStatistika</Name>
+        <Access>Public</Access>
+        <Location left="2169" top="331" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Property">public string Naziv { get; }</Member>
+        <Member type="Method">public StatistikaRezultat Izracunaj(List&lt;BiciklStatistika&gt; podaci)</Member>
+        <Member type="Method">private double Medijana(List&lt;double&gt; vrednosti)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>MinMaxStatistika</Name>
+        <Access>Public</Access>
+        <Location left="2169" top="576" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public StatistikaRezultat Izracunaj(List&lt;BiciklStatistika&gt; podaci)</Member>
+        <Member type="Property">public string Naziv { get; }</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>ProsekStatistika</Name>
+        <Access>Public</Access>
+        <Location left="2169" top="814" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public StatistikaRezultat Izracunaj(List&lt;BiciklStatistika&gt; podaci)</Member>
+        <Member type="Property">public string Naziv { get; }</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>StatistickaObrada</Name>
+        <Access>Public</Access>
+        <Location left="1904" top="623" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private IStatistickaMetoda strategy</Member>
+        <Member type="Constructor">public StatistickaObrada(IStatistickaMetoda strategy)</Member>
+        <Member type="Method">public void SetStrategy(IstatistickaMetoda strategy)</Member>
+        <Member type="Method">public StatistikaRezultat Obradi(List&lt;BiciklStatistika&gt; podaci)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>TextFileLogger</Name>
+        <Access>Public</Access>
+        <Location left="990" top="362" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly string putanja</Member>
+        <Member type="Field">private readonly object zakljucavanje</Member>
+        <Member type="Constructor">public TextFileLogger(string putanja)</Member>
+        <Member type="Method">public void Log(string poruka)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>StatistikaViewModel</Name>
+        <Access>Public</Access>
+        <Location left="975" top="931" />
+        <Size width="1014" height="393" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">private readonly IBiciklistatistikaAdapter adapter</Member>
+        <Member type="Field">private readonly StatistickaObrada obrada</Member>
+        <Member type="Field">private readonly ICsvExporter csvExporter</Member>
+        <Member type="Field">private readonly ILogger logger</Member>
+        <Member type="Field">private readonly IPodaciProvider podaciProvider</Member>
+        <Member type="Property">public ObservableCollection&lt;BiciklStatistika&gt; BicikliStatistike { get; set; }</Member>
+        <Member type="Property">public ObservableCollection&lt;IStatistickaMetoda&gt; DostupneMetode { get; set; }</Member>
+        <Member type="Property">public IstatistickaMetoda IzabranaMetoda { get; set; }</Member>
+        <Member type="Property">public StatistikaRezultat Rezultat { get; set; }</Member>
+        <Member type="Property">public string StatusPoruka { get; set; }</Member>
+        <Member type="Property">public ICommand UcitajPodatkeCommand { get; }</Member>
+        <Member type="Property">public ICommand IzracunajCommand { get; }</Member>
+        <Member type="Property">public ICommand ExportCsvCommand { get; }</Member>
+        <Member type="Method">public void UcitajPodatke()</Member>
+        <Member type="Method">public void Izracunaj()</Member>
+        <Member type="Method">public void ExportCsv()</Member>
+        <Member type="Constructor">public StatistikaViewModel(IBiciklStatistikaAdapter adapter, StatistickaObrada obrada, List&lt;IStatistickaMetoda&gt; metode, ICsvExporter csvExporter, ILogger logger, IPodaciProvider podaciProvider)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Comment">
+        <Text>KORISCENI PROJEKTNI OBRASCI:
+
+Strategy (obrazac ponasanja):
+- IStatistickaMetoda interfejs
+- ProsekStatistika, MedianaStatistika, MinMaxStatistika
+- StatistickaObrada kao Context klasa
+
+Adapter (strukturni obrazac):
+- BiciklStatistikaAdapter
+- Prilagodjava dve liste iz Komponente 1
+  u strukturu pogodnu za statistiku
+
+MVVM (arhitekturni obrazac):
+- StatistikaViewModel
+- MainWindow.xaml kao View
+- BiciklStatistika, StatistikaRezultat kao Model
+
+SOLID PRINCIPI:
+- SRP: svaka klasa jedna odgovornost
+- OCP: nova statisticka metoda = nova klasa
+- DIP: zavisnosti kroz interfejse,
+       App.xaml.cs kao composition root</Text>
+        <Location left="638" top="380" />
+        <Size width="279" height="352" />
+      </Entity>
+      <Entity type="Class">
+        <Name>ViewModelBase</Name>
+        <Access>Public</Access>
+        <Location left="700" top="1053" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">protected void OnPropertyChanged()</Member>
+        <Modifier>Abstract</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>SeedDataHelper</Name>
+        <Access>Public</Access>
+        <Location left="700" top="772" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public static List&lt;TrkackiBicikl&gt; DobijDefaultPodatke()</Member>
+        <Modifier>Static</Modifier>
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Association" first="1" second="2">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>2241</X>
+          <Y>17</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="0" second="3">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+      </Relationship>
+      <Relationship type="Realization" first="12" second="5">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="10" second="9">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="11" second="8">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="17" second="7">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="13" second="6">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>2144</X>
+          <Y>471</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Realization" first="14" second="6">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+      </Relationship>
+      <Relationship type="Realization" first="15" second="6">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>2144</X>
+          <Y>900</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>2095</X>
+          <Y>472</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Association" first="18" second="7">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1518</X>
+          <Y>906</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>1059</X>
+          <Y>845</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="18" second="8">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1516</X>
+          <Y>909</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>1515</X>
+          <Y>848</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="18" second="5">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1517</X>
+          <Y>904</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>1299</X>
+          <Y>848</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="18" second="9">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1516</X>
+          <Y>906</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>1727</X>
+          <Y>855</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="18" second="16">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1517</X>
+          <Y>892</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="16" second="6">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1981</X>
+          <Y>598</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Generalization" first="18" second="20">
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>950</X>
+          <Y>1134</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>887</X>
+          <Y>1134</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Association" first="18" second="21">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>950</X>
+          <Y>1025</Y>
+        </BendPoint>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Association</AssociationType>
+      </Relationship>
+      <Relationship type="Dependency" first="10" second="0">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1848</X>
+          <Y>386</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>1633</X>
+          <Y>143</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Dependency" first="11" second="1">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>1968</X>
+          <Y>327</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Dependency" first="6" second="1">
+        <Label>
+        </Label>
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>2029</X>
+          <Y>337</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>2029</X>
+          <Y>317</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Dependency" first="6" second="0">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <BendPoint relativeToStartShape="True">
+          <X>1879</X>
+          <Y>380</Y>
+        </BendPoint>
+        <BendPoint relativeToStartShape="False">
+          <X>1820</X>
+          <Y>145</Y>
+        </BendPoint>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+</Project>

@@ -1,0 +1,12 @@
+window_sizes 1920 1009 450 1465 859 104
+
+diagrams
+  active  sequencediagram_ref 128130 // IzracunavanjeEksport
+    1453 818 100 A4 84 0
+end
+show_stereotypes
+selected sequencediagram_ref 128130 // IzracunavanjeEksport
+open
+  usecaseview_ref 128130 // IzracunavanjeEksport
+end
+end
