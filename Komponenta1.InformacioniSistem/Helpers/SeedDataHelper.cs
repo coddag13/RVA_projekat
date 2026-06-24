@@ -2,7 +2,7 @@ using System;
 using RVA.Shared.Models;
 using RVA.Shared;
 
-namespace Komponenta1.InformacioniSistem
+namespace Komponenta1.InformacioniSistem.Helpers
 {
     public static class SeedDataHelper
     {

@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using RVA.Shared.Models;
 
-namespace Komponenta1.InformacioniSistem
+using Komponenta1.InformacioniSistem.Interfaces;
+namespace Komponenta1.InformacioniSistem.Services
 {
-    public class ValidationService
+    public class ValidationService : IValidationService
     {
         public List<string> VratiGreskeBicikla(TrkackiBicikl bicikl)
         {

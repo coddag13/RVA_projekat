@@ -4,16 +4,19 @@ using System.Linq;
 using System.Windows.Input;
 using RVA.Shared.Models;
 
-namespace Komponenta1.InformacioniSistem
+using Komponenta1.InformacioniSistem.Interfaces;
+using Komponenta1.InformacioniSistem.Commands;
+namespace Komponenta1.InformacioniSistem.ViewModels
 {
     public class BicikliViewModel : ViewModelBase
     {
         private readonly IBiciklService biciklService;
         private readonly UndoRedoManager undoRedoManager;
-        private readonly ValidationService validationService;
+        private readonly IValidationService validationService;
 
         private ObservableCollection<TrkackiBicikl> bicikli;
         private TrkackiBicikl izabraniBicikl;
+        private string pretragaId;
         private string pretragaTim;
         private string pretragaVozac;
         private double? pretragaTezina;
@@ -29,7 +32,7 @@ namespace Komponenta1.InformacioniSistem
         public BicikliViewModel(
             IBiciklService biciklService,
             UndoRedoManager undoRedoManager,
-            ValidationService validationService)
+            IValidationService validationService)
         {
             this.biciklService = biciklService;
             this.undoRedoManager = undoRedoManager;
@@ -66,6 +69,21 @@ namespace Komponenta1.InformacioniSistem
             set
             {
                 izabraniBicikl = value;
+                OnPropertyChanged();
+
+                if (izabraniBicikl != null)
+                {
+                    PopuniFormu(izabraniBicikl);
+                }
+            }
+        }
+
+        public string PretragaId
+        {
+            get { return pretragaId; }
+            set
+            {
+                pretragaId = value;
                 OnPropertyChanged();
             }
         }
@@ -194,6 +212,7 @@ namespace Komponenta1.InformacioniSistem
             PorukaValidacije = "Bicikl je uspjesno dodat.";
             ResetujUnos();
             LoadBicikli();
+            IzabraniBicikl = null;
             OnBicikliPromijenjeni();
         }
 
@@ -205,25 +224,27 @@ namespace Komponenta1.InformacioniSistem
                 return;
             }
 
-            if (!validationService.ValidirajBicikl(IzabraniBicikl))
-            {
-                PorukaValidacije = string.Join(" ", validationService.VratiGreskeBicikla(IzabraniBicikl));
-                return;
-            }
-
+            TrkackiBicikl stariBicikl = KopirajBicikl(IzabraniBicikl);
             TrkackiBicikl izmijenjeniBicikl = new TrkackiBicikl
             {
                 Id = IzabraniBicikl.Id,
-                Tim = IzabraniBicikl.Tim,
-                Vozac = IzabraniBicikl.Vozac,
-                Tezina = IzabraniBicikl.Tezina,
-                Sprinter = IzabraniBicikl.Sprinter
+                Tim = NoviTim,
+                Vozac = NoviVozac,
+                Tezina = NovaTezina,
+                Sprinter = NoviSprinter
             };
 
-            IUndoableCommand command = new UpdateBiciklCommand(biciklService, IzabraniBicikl, izmijenjeniBicikl);
+            if (!validationService.ValidirajBicikl(izmijenjeniBicikl))
+            {
+                PorukaValidacije = string.Join(" ", validationService.VratiGreskeBicikla(izmijenjeniBicikl));
+                return;
+            }
+
+            IUndoableCommand command = new UpdateBiciklCommand(biciklService, stariBicikl, izmijenjeniBicikl);
             undoRedoManager.ExecuteCommand(command);
             PorukaValidacije = "Bicikl je izmijenjen.";
             LoadBicikli();
+            IzabraniBicikl = Bicikli.FirstOrDefault(b => b.Id == izmijenjeniBicikl.Id);
             OnBicikliPromijenjeni();
         }
 
@@ -239,13 +260,31 @@ namespace Komponenta1.InformacioniSistem
             undoRedoManager.ExecuteCommand(command);
             PorukaValidacije = "Bicikl je obrisan.";
             LoadBicikli();
+            IzabraniBicikl = null;
+            ResetujUnos();
             OnBicikliPromijenjeni();
         }
 
         public void SearchBicikli()
         {
+            Guid? id = null;
+
+            if (!string.IsNullOrWhiteSpace(PretragaId))
+            {
+                Guid parsiraniId;
+
+                if (!Guid.TryParse(PretragaId, out parsiraniId))
+                {
+                    PorukaValidacije = "Id bicikla nije u ispravnom formatu.";
+                    return;
+                }
+
+                id = parsiraniId;
+            }
+
             Bicikli = new ObservableCollection<TrkackiBicikl>(
-                biciklService.Search(PretragaTim, PretragaVozac, PretragaTezina, PretragaSprinter));
+                biciklService.Search(id, PretragaTim, PretragaVozac, PretragaTezina, PretragaSprinter));
+            PorukaValidacije = "Pretraga bicikala je zavrsena.";
         }
 
         public void Undo()
@@ -268,6 +307,26 @@ namespace Komponenta1.InformacioniSistem
             NoviVozac = string.Empty;
             NovaTezina = 7.0;
             NoviSprinter = false;
+        }
+
+        private void PopuniFormu(TrkackiBicikl bicikl)
+        {
+            NoviTim = bicikl.Tim;
+            NoviVozac = bicikl.Vozac;
+            NovaTezina = bicikl.Tezina;
+            NoviSprinter = bicikl.Sprinter;
+        }
+
+        private TrkackiBicikl KopirajBicikl(TrkackiBicikl bicikl)
+        {
+            return new TrkackiBicikl
+            {
+                Id = bicikl.Id,
+                Tim = bicikl.Tim,
+                Vozac = bicikl.Vozac,
+                Tezina = bicikl.Tezina,
+                Sprinter = bicikl.Sprinter
+            };
         }
 
         private void OnBicikliPromijenjeni()

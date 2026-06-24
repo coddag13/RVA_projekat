@@ -1,11 +1,9 @@
-using System;
 using RVA.Shared.Models;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace Komponenta1.InformacioniSistem
+using Komponenta1.InformacioniSistem.Interfaces;
+namespace Komponenta1.InformacioniSistem.Data
 {
     public class XmlDataStorage : IDataStorage
     {

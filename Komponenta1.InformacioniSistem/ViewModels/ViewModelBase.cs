@@ -1,11 +1,7 @@
-using System;
-using RVA.Shared.Models;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 
-namespace Komponenta1.InformacioniSistem
+namespace Komponenta1.InformacioniSistem.ViewModels
 {
 	public abstract class ViewModelBase : INotifyPropertyChanged
 	{

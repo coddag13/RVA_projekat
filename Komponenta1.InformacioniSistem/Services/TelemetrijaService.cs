@@ -3,7 +3,9 @@ using RVA.Shared.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Komponenta1.InformacioniSistem
+using Komponenta1.InformacioniSistem.State;
+using Komponenta1.InformacioniSistem.Interfaces;
+namespace Komponenta1.InformacioniSistem.Services
 {
     public class TelemetrijaService : ITelemetrijaService
     {
@@ -20,16 +22,18 @@ namespace Komponenta1.InformacioniSistem
 
         public List<BiciklistickaTelemetrija> GetAll()
         {
-            return storage.Telemetrije;
+            return storage.Telemetrije.ToList();
         }
 
-        public List<BiciklistickaTelemetrija> Search(double brzinaVoznje, double pulsVozaca, StanjeVoznje stanje)
+        public List<BiciklistickaTelemetrija> Search(Guid? biciklId, DateTime? vremeOcitavanja, double brzinaVoznje, double pulsVozaca, StanjeVoznje? stanje)
         {
             return storage.Telemetrije
                 .Where(t =>
+                    (!biciklId.HasValue || t.BiciklId == biciklId.Value) &&
+                    (!vremeOcitavanja.HasValue || t.VremeOcitavanja == vremeOcitavanja.Value) &&
                     (brzinaVoznje <= 0 || t.BrzinaVoznje == brzinaVoznje) &&
                     (pulsVozaca <= 0 || t.PulsVozaca == pulsVozaca) &&
-                    t.Stanje == stanje)
+                    (!stanje.HasValue || t.Stanje == stanje.Value))
                 .ToList();
         }
 

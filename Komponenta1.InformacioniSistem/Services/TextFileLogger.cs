@@ -1,10 +1,8 @@
 using System;
-using RVA.Shared.Models;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
-namespace Komponenta1.InformacioniSistem
+using Komponenta1.InformacioniSistem.Interfaces;
+namespace Komponenta1.InformacioniSistem.Services
 {
 	public class TextFileLogger : ILogger
 	{

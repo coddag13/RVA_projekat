@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using RVA.Shared.Models;
 
-namespace Komponenta1.InformacioniSistem
+using Komponenta1.InformacioniSistem.Interfaces;
+namespace Komponenta1.InformacioniSistem.Commands
 {
     public class UndoRedoManager
     {

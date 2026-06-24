@@ -1,12 +1,10 @@
-using System;
 using System.Threading.Tasks;
 using RVA.Shared.Models;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
-using System.Windows;
 
-namespace Komponenta1.InformacioniSistem
+using Komponenta1.InformacioniSistem.Interfaces;
+using Komponenta1.InformacioniSistem.Commands;
+namespace Komponenta1.InformacioniSistem.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {

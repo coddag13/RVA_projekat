@@ -8,7 +8,8 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using RVA.Shared.Models;
 using SkiaSharp;
 
-namespace Komponenta1.InformacioniSistem
+using Komponenta1.InformacioniSistem.Interfaces;
+namespace Komponenta1.InformacioniSistem.ViewModels
 {
     public class GrafikonViewModel : ViewModelBase
     {

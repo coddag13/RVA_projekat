@@ -1,23 +1,28 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using RVA.Shared.Models;
 
-namespace Komponenta1.InformacioniSistem
+using Komponenta1.InformacioniSistem.Interfaces;
+using Komponenta1.InformacioniSistem.Commands;
+namespace Komponenta1.InformacioniSistem.ViewModels
 {
     public class TelemetrijaViewModel : ViewModelBase
     {
         private readonly ITelemetrijaService telemetrijaService;
         private readonly IBiciklService biciklService;
         private readonly UndoRedoManager undoRedoManager;
-        private readonly ValidationService validationService;
+        private readonly IValidationService validationService;
 
         private ObservableCollection<TrkackiBicikl> bicikli;
         private ObservableCollection<BiciklistickaTelemetrija> telemetrije;
         private BiciklistickaTelemetrija izabranaTelemetrija;
+        private string pretragaBiciklId;
+        private string pretragaVremeOcitavanja;
         private double pretragaBrzinaVoznje;
         private double pretragaPulsVozaca;
-        private StanjeVoznje pretragaStanje;
+        private StanjeFilterOpcija pretragaStanje;
         private TrkackiBicikl izabraniBiciklZaTelemetriju;
         private double novaBrzinaVoznje;
         private double noviPulsVozaca;
@@ -30,7 +35,7 @@ namespace Komponenta1.InformacioniSistem
             ITelemetrijaService telemetrijaService,
             IBiciklService biciklService,
             UndoRedoManager undoRedoManager,
-            ValidationService validationService)
+            IValidationService validationService)
         {
             this.telemetrijaService = telemetrijaService;
             this.biciklService = biciklService;
@@ -39,6 +44,7 @@ namespace Komponenta1.InformacioniSistem
 
             Bicikli = new ObservableCollection<TrkackiBicikl>();
             Telemetrije = new ObservableCollection<BiciklistickaTelemetrija>();
+            DostupnaStanjaPretrage = new ObservableCollection<StanjeFilterOpcija>();
             NovaBrzinaVoznje = 30;
             NoviPulsVozaca = 120;
             NovoStanje = StanjeVoznje.Stabilna;
@@ -53,12 +59,15 @@ namespace Komponenta1.InformacioniSistem
 
             LoadBicikli();
             LoadTelemetrije();
+            LoadStanjaPretrage();
         }
 
         public Array DostupnaStanja
         {
             get { return Enum.GetValues(typeof(StanjeVoznje)); }
         }
+
+        public ObservableCollection<StanjeFilterOpcija> DostupnaStanjaPretrage { get; set; }
 
         public ObservableCollection<BiciklistickaTelemetrija> Telemetrije
         {
@@ -87,6 +96,31 @@ namespace Komponenta1.InformacioniSistem
             {
                 izabranaTelemetrija = value;
                 OnPropertyChanged();
+
+                if (izabranaTelemetrija != null)
+                {
+                    PopuniFormu(izabranaTelemetrija);
+                }
+            }
+        }
+
+        public string PretragaBiciklId
+        {
+            get { return pretragaBiciklId; }
+            set
+            {
+                pretragaBiciklId = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string PretragaVremeOcitavanja
+        {
+            get { return pretragaVremeOcitavanja; }
+            set
+            {
+                pretragaVremeOcitavanja = value;
+                OnPropertyChanged();
             }
         }
 
@@ -110,7 +144,7 @@ namespace Komponenta1.InformacioniSistem
             }
         }
 
-        public StanjeVoznje PretragaStanje
+        public StanjeFilterOpcija PretragaStanje
         {
             get { return pretragaStanje; }
             set
@@ -193,6 +227,19 @@ namespace Komponenta1.InformacioniSistem
             }
         }
 
+        public void LoadStanjaPretrage()
+        {
+            DostupnaStanjaPretrage.Clear();
+            DostupnaStanjaPretrage.Add(new StanjeFilterOpcija("Sva stanja", null));
+
+            foreach (StanjeVoznje stanje in Enum.GetValues(typeof(StanjeVoznje)).Cast<StanjeVoznje>())
+            {
+                DostupnaStanjaPretrage.Add(new StanjeFilterOpcija(stanje.ToString(), stanje));
+            }
+
+            PretragaStanje = DostupnaStanjaPretrage.FirstOrDefault();
+        }
+
         public void AddTelemetrija()
         {
             if (IzabraniBiciklZaTelemetriju == null)
@@ -218,9 +265,11 @@ namespace Komponenta1.InformacioniSistem
 
             IUndoableCommand command = new AddTelemetrijaCommand(telemetrijaService, novaTelemetrija);
             undoRedoManager.ExecuteCommand(command);
-            PorukaValidacije = "Telemetrija je uspjesno dodata.";
+            telemetrijaService.SimulirajPromjenuStanja(novaTelemetrija);
+            PorukaValidacije = "Telemetrija je dodata i stanje je automatski promijenjeno.";
             ResetujUnos();
             LoadTelemetrije();
+            IzabranaTelemetrija = null;
             OnTelemetrijaPromijenjena();
         }
 
@@ -232,29 +281,33 @@ namespace Komponenta1.InformacioniSistem
                 return;
             }
 
-            if (!validationService.ValidirajTelemetriju(IzabranaTelemetrija))
-            {
-                PorukaValidacije = string.Join(" ", validationService.VratiGreskeTelemetrije(IzabranaTelemetrija));
-                return;
-            }
-
+            BiciklistickaTelemetrija staraTelemetrija = KopirajTelemetriju(IzabranaTelemetrija);
             BiciklistickaTelemetrija izmijenjenaTelemetrija = new BiciklistickaTelemetrija
             {
                 BiciklId = IzabranaTelemetrija.BiciklId,
                 VremeOcitavanja = IzabranaTelemetrija.VremeOcitavanja,
-                BrzinaVoznje = IzabranaTelemetrija.BrzinaVoznje,
-                PulsVozaca = IzabranaTelemetrija.PulsVozaca,
-                Stanje = IzabranaTelemetrija.Stanje
+                BrzinaVoznje = NovaBrzinaVoznje,
+                PulsVozaca = NoviPulsVozaca,
+                Stanje = NovoStanje
             };
+
+            if (!validationService.ValidirajTelemetriju(izmijenjenaTelemetrija))
+            {
+                PorukaValidacije = string.Join(" ", validationService.VratiGreskeTelemetrije(izmijenjenaTelemetrija));
+                return;
+            }
 
             IUndoableCommand command = new UpdateTelemetrijaCommand(
                 telemetrijaService,
-                IzabranaTelemetrija,
+                staraTelemetrija,
                 izmijenjenaTelemetrija);
 
             undoRedoManager.ExecuteCommand(command);
             PorukaValidacije = "Telemetrija je izmijenjena.";
             LoadTelemetrije();
+            IzabranaTelemetrija = Telemetrije.FirstOrDefault(t =>
+                t.BiciklId == izmijenjenaTelemetrija.BiciklId &&
+                t.VremeOcitavanja == izmijenjenaTelemetrija.VremeOcitavanja);
             OnTelemetrijaPromijenjena();
         }
 
@@ -270,13 +323,45 @@ namespace Komponenta1.InformacioniSistem
             undoRedoManager.ExecuteCommand(command);
             PorukaValidacije = "Telemetrija je obrisana.";
             LoadTelemetrije();
+            IzabranaTelemetrija = null;
+            ResetujUnos();
             OnTelemetrijaPromijenjena();
         }
 
         public void SearchTelemetrija()
         {
+            Guid? biciklId = null;
+            DateTime? vremeOcitavanja = null;
+
+            if (!string.IsNullOrWhiteSpace(PretragaBiciklId))
+            {
+                Guid parsiraniBiciklId;
+
+                if (!Guid.TryParse(PretragaBiciklId, out parsiraniBiciklId))
+                {
+                    PorukaValidacije = "Bicikl Id nije u ispravnom formatu.";
+                    return;
+                }
+
+                biciklId = parsiraniBiciklId;
+            }
+
+            if (!string.IsNullOrWhiteSpace(PretragaVremeOcitavanja))
+            {
+                DateTime parsiranoVreme;
+
+                if (!DateTime.TryParse(PretragaVremeOcitavanja, out parsiranoVreme))
+                {
+                    PorukaValidacije = "Vrijeme ocitavanja nije u ispravnom formatu.";
+                    return;
+                }
+
+                vremeOcitavanja = parsiranoVreme;
+            }
+
             Telemetrije = new ObservableCollection<BiciklistickaTelemetrija>(
-                telemetrijaService.Search(PretragaBrzinaVoznje, PretragaPulsVozaca, PretragaStanje));
+                telemetrijaService.Search(biciklId, vremeOcitavanja, PretragaBrzinaVoznje, PretragaPulsVozaca, PretragaStanje?.Stanje));
+            PorukaValidacije = "Pretraga telemetrije je zavrsena.";
         }
 
         public void SimulirajStanje()
@@ -312,6 +397,26 @@ namespace Komponenta1.InformacioniSistem
             NovaBrzinaVoznje = 30;
             NoviPulsVozaca = 120;
             NovoStanje = StanjeVoznje.Stabilna;
+        }
+
+        private void PopuniFormu(BiciklistickaTelemetrija telemetrija)
+        {
+            IzabraniBiciklZaTelemetriju = Bicikli.FirstOrDefault(b => b.Id == telemetrija.BiciklId);
+            NovaBrzinaVoznje = telemetrija.BrzinaVoznje;
+            NoviPulsVozaca = telemetrija.PulsVozaca;
+            NovoStanje = telemetrija.Stanje;
+        }
+
+        private BiciklistickaTelemetrija KopirajTelemetriju(BiciklistickaTelemetrija telemetrija)
+        {
+            return new BiciklistickaTelemetrija
+            {
+                BiciklId = telemetrija.BiciklId,
+                VremeOcitavanja = telemetrija.VremeOcitavanja,
+                BrzinaVoznje = telemetrija.BrzinaVoznje,
+                PulsVozaca = telemetrija.PulsVozaca,
+                Stanje = telemetrija.Stanje
+            };
         }
 
         private void OnTelemetrijaPromijenjena()

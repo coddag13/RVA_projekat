@@ -6,10 +6,27 @@ namespace Komponenta1.InformacioniSistem
 {
     public partial class App : Application
     {
-        protected override void OnStartup(StartupEventArgs e)
+        private ApplicationBootstrapper bootstrapper;
+
+        private void Application_Startup(object sender, StartupEventArgs e)
         {
-            base.OnStartup(e);
             LiveCharts.Configure(config => config.AddSkiaSharp().AddDefaultMappers());
+
+            bootstrapper = new ApplicationBootstrapper();
+
+            MainWindow mainWindow = new MainWindow
+            {
+                DataContext = bootstrapper.CreateMainViewModel()
+            };
+
+            MainWindow = mainWindow;
+            mainWindow.Show();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            bootstrapper?.Dispose();
+            base.OnExit(e);
         }
     }
 }

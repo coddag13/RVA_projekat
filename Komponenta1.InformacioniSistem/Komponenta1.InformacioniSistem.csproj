@@ -118,6 +118,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ApplicationBootstrapper.cs" />
     <Compile Include="Commands\AddBiciklCommand.cs" />
     <Compile Include="Commands\AddTelemetrijaCommand.cs" />
     <Compile Include="Commands\DeleteBiciklCommand.cs" />
@@ -126,6 +127,15 @@
     <Compile Include="Commands\UndoRedoManager.cs" />
     <Compile Include="Commands\UpdateBiciklCommand.cs" />
     <Compile Include="Commands\UpdateTelemetrijaCommand.cs" />
+    <Compile Include="Views\BicikliView.xaml.cs">
+      <DependentUpon>BicikliView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GrafikonView.xaml.cs">
+      <DependentUpon>GrafikonView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TelemetrijaView.xaml.cs">
+      <DependentUpon>TelemetrijaView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\BiciklService.cs" />
     <Compile Include="Services\Komponenta1Service.cs" />
     <Compile Include="Services\TelemetrijaService.cs" />
@@ -139,10 +149,23 @@
     <Compile Include="ViewModels\BicikliViewModel.cs" />
     <Compile Include="ViewModels\GrafikonViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\StanjeFilterOpcija.cs" />
     <Compile Include="ViewModels\StanjeStatistika.cs" />
     <Compile Include="ViewModels\TelemetrijaViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\BicikliView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\GrafikonView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\TelemetrijaView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -159,6 +182,7 @@
     <Compile Include="Interfaces\IStanjeVoznjeHandler.cs" />
     <Compile Include="Interfaces\ITelemetrijaService.cs" />
     <Compile Include="Interfaces\IUndoableCommand.cs" />
+    <Compile Include="Interfaces\IValidationService.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

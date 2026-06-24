@@ -1,8 +1,7 @@
 using System;
-using RVA.Shared.Models;
 using System.Windows.Input;
 
-namespace Komponenta1.InformacioniSistem
+namespace Komponenta1.InformacioniSistem.Commands
 {
     public class RelayCommand : ICommand
     {

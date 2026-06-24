@@ -2,9 +2,9 @@ using System;
 using RVA.Shared.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace Komponenta1.InformacioniSistem
+using Komponenta1.InformacioniSistem.Interfaces;
+namespace Komponenta1.InformacioniSistem.Services
 {
 	public class BiciklService : IBiciklService
 	{
@@ -19,13 +19,14 @@ namespace Komponenta1.InformacioniSistem
 
         public List<TrkackiBicikl> GetAll()
         {
-            return storage.Bicikli;
+            return storage.Bicikli.ToList();
         }
 
-        public List<TrkackiBicikl> Search(string tim, string vozac, double? tezina, bool? sprinter)
+        public List<TrkackiBicikl> Search(Guid? id, string tim, string vozac, double? tezina, bool? sprinter)
         {
             return storage.Bicikli
                 .Where(b =>
+                    (!id.HasValue || b.Id == id.Value) &&
                     (string.IsNullOrWhiteSpace(tim) || b.Tim.ToLower().Contains(tim.ToLower())) &&
                     (string.IsNullOrWhiteSpace(vozac) || b.Vozac.ToLower().Contains(vozac.ToLower())) &&
                     (!tezina.HasValue || tezina.Value <= 0 || b.Tezina == tezina.Value) &&
