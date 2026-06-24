@@ -18,8 +18,6 @@ namespace Komponenta2.Statistika
         {
             base.OnStartup(e);
 
-            // Composition root - svi konkretni objekti se kreiraju ovde
-
             string dataFolder = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
             string logFilePath = System.IO.Path.Combine(dataFolder, "aktivnosti_komponenta2.txt");
 
@@ -30,9 +28,9 @@ namespace Komponenta2.Statistika
 
             var metode = new List<IStatistickaMetoda>
             {
-                new ProsekStatistika(),
-                new MedianaStatistika(),
-                new MinMaxStatistika()
+                new PulsRazlikeStatistika(),
+                new MaxBrzineStatistika(),
+                new BrojOdustajanja()
             };
 
             StatistickaObrada obrada = new StatistickaObrada(metode[0]);

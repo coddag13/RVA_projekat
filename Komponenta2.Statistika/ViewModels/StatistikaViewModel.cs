@@ -1,19 +1,15 @@
 ﻿using Komponenta2.Statistika.Interfaces;
 using Komponenta2.Statistika.Models;
 using Komponenta2.Statistika.Services;
+using Komponenta2.Statistika.Helpers;
 using Microsoft.Win32;
 using RVA.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using Komponenta2.Statistika.Helpers;
-
-
 
 namespace Komponenta2.Statistika.ViewModels
 {
@@ -27,7 +23,7 @@ namespace Komponenta2.Statistika.ViewModels
 
         public ObservableCollection<BiciklStatistika> BicikliStatistike { get; set; }
         public ObservableCollection<IStatistickaMetoda> DostupneMetode { get; set; }
-
+        public ObservableCollection<TelemetrijaPrikaz> DictionaryPrikaz { get; set; }
 
         private IStatistickaMetoda izabranaMetoda;
         public IStatistickaMetoda IzabranaMetoda
@@ -82,6 +78,7 @@ namespace Komponenta2.Statistika.ViewModels
 
             BicikliStatistike = new ObservableCollection<BiciklStatistika>();
             DostupneMetode = new ObservableCollection<IStatistickaMetoda>(metode);
+            DictionaryPrikaz = new ObservableCollection<TelemetrijaPrikaz>();
             IzabranaMetoda = DostupneMetode.Count > 0 ? DostupneMetode[0] : null;
 
             UcitajPodatkeCommand = new RelayCommand(_ => UcitajPodatke());
@@ -102,7 +99,7 @@ namespace Komponenta2.Statistika.ViewModels
             {
                 bicikli = podaciProvider.GetBicikli();
                 telemetrije = podaciProvider.GetTelemetrije();
-                logger.Log($"Učitano {bicikli.Count} bicikala i {telemetrije.Count} telemetrija iz Komponente 1.");
+                logger.Log($"Ucitano {bicikli.Count} bicikala i {telemetrije.Count} telemetrija iz Komponente 1.");
             }
             catch (Exception ex)
             {
@@ -110,24 +107,35 @@ namespace Komponenta2.Statistika.ViewModels
                 bicikli = defBicikli;
                 telemetrije = defTelemetrije;
                 koristiDefault = true;
-                logger.Log($"Komponenta 1 nedostupna ({ex.Message}). Učitani default podaci.");
+                logger.Log($"Komponenta 1 nedostupna ({ex.Message}). Ucitani default podaci.");
             }
 
+            // Adapter za statistiku (grupisano po biciklu)
             var statistike = adapter.Adapt(bicikli, telemetrije);
-
             BicikliStatistike.Clear();
             foreach (var s in statistike)
             {
                 BicikliStatistike.Add(s);
             }
 
+            // Adapter za Dictionary prikaz (grupisano po periodu)
+            var dictionary = adapter.AdaptToDictionary(bicikli, telemetrije);
+            DictionaryPrikaz.Clear();
+            foreach (var entry in dictionary)
+            {
+                foreach (var prikaz in entry.Value)
+                {
+                    DictionaryPrikaz.Add(prikaz);
+                }
+            }
+
             if (koristiDefault)
             {
-                StatusPoruka = $"Komponenta 1 nije dostupna - učitano {statistike.Count} default bicikala.";
+                StatusPoruka = $"Komponenta 1 nije dostupna - ucitano {statistike.Count} default bicikala.";
             }
             else
             {
-                StatusPoruka = $"Učitano {statistike.Count} bicikala iz Komponente 1.";
+                StatusPoruka = $"Ucitano {statistike.Count} bicikala iz Komponente 1.";
             }
         }
 
@@ -139,8 +147,8 @@ namespace Komponenta2.Statistika.ViewModels
             var podaci = new List<BiciklStatistika>(BicikliStatistike);
             Rezultat = obrada.Obradi(podaci);
 
-            StatusPoruka = $"Izračunato: {Rezultat.NazivMetode}";
-            logger.Log($"Izvršena statistička obrada metodom: {Rezultat.NazivMetode}. Broj rezultata: {Rezultat.Stavke.Count}");
+            StatusPoruka = $"Izracunato: {Rezultat.NazivMetode}";
+            logger.Log($"Izvrsena statisticka obrada metodom: {Rezultat.NazivMetode}. Broj rezultata: {Rezultat.Stavke.Count}");
         }
 
         private void ExportCsv()
@@ -156,15 +164,15 @@ namespace Komponenta2.Statistika.ViewModels
                 try
                 {
                     csvExporter.Export(Rezultat, dialog.FileName);
-                    StatusPoruka = $"Sačuvano u: {dialog.FileName}";
+                    StatusPoruka = $"Sacuvano u: {dialog.FileName}";
                     logger.Log($"Rezultat statistike ({Rezultat.NazivMetode}) eksportovan u CSV: {dialog.FileName}");
-                    MessageBox.Show("CSV fajl je uspešno sačuvan.", "Uspeh", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("CSV fajl je uspesno sacuvan.", "Uspeh", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
                 {
-                    StatusPoruka = $"GREŠKA pri čuvanju: {ex.Message}";
-                    logger.Log($"GREŠKA pri eksportovanju CSV: {ex.Message}");
-                    MessageBox.Show(ex.Message, "Greška", MessageBoxButton.OK, MessageBoxImage.Error);
+                    StatusPoruka = $"GRESKA pri cuvanju: {ex.Message}";
+                    logger.Log($"GRESKA pri eksportovanju CSV: {ex.Message}");
+                    MessageBox.Show(ex.Message, "Greska", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="Peloton Pulse - Statistika"
-        Height="760"
+        Height="820"
         Width="1180"
-        MinHeight="680"
+        MinHeight="750"
         MinWidth="1040"
         WindowStartupLocation="CenterScreen"
         Background="#FFF7EF">
@@ -60,7 +60,6 @@
         </Style>
 
         <Style TargetType="DataGrid">
-            <Setter Property="Margin" Value="0,12,0,0"/>
             <Setter Property="AutoGenerateColumns" Value="False"/>
             <Setter Property="CanUserAddRows" Value="False"/>
             <Setter Property="IsReadOnly" Value="True"/>
@@ -139,13 +138,13 @@
                             <TextBlock Text="Statisticke metode"
                                        FontWeight="Bold"
                                        Margin="0,0,0,8"/>
-                            <TextBlock Text="Prosek"
+                            <TextBlock Text="Prosecni puls i razlike"
                                        FontSize="12"
                                        Opacity="0.85"/>
-                            <TextBlock Text="Medijana"
+                            <TextBlock Text="Max brzine po biciklisti"
                                        FontSize="12"
                                        Opacity="0.85"/>
-                            <TextBlock Text="Min / Max"
+                            <TextBlock Text="Broj odustajanja"
                                        FontSize="12"
                                        Opacity="0.85"/>
                         </StackPanel>
@@ -174,11 +173,13 @@
         <Grid Grid.Column="1" Margin="24">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <DockPanel Grid.Row="0" Margin="0,0,0,18">
+            <!-- Header + dugme -->
+            <DockPanel Grid.Row="0" Margin="0,0,0,14">
                 <Button DockPanel.Dock="Right"
                         Content="Ucitaj podatke"
                         Command="{Binding UcitajPodatkeCommand}"
@@ -196,28 +197,60 @@
                 </StackPanel>
             </DockPanel>
 
-            <!-- DataGrid -->
+            <!-- Dictionary prikaz -->
             <Border Grid.Row="1"
                     Background="White"
                     BorderBrush="#E8D7C3"
                     BorderThickness="1"
-                    Padding="18">
-                <DataGrid ItemsSource="{Binding BicikliStatistike}">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Tim" Binding="{Binding Tim}" Width="*"/>
-                        <DataGridTextColumn Header="Vozac" Binding="{Binding Vozac}" Width="*"/>
-                        <DataGridTextColumn Header="Tezina" Binding="{Binding Tezina, StringFormat=F2}" Width="80"/>
-                        <DataGridCheckBoxColumn Header="Sprinter" Binding="{Binding Sprinter}" Width="80"/>
-                        <DataGridTextColumn Header="Br. merenja" Binding="{Binding BrojMerenja}" Width="100"/>
-                        <DataGridTextColumn Header="Pros. brzina" Binding="{Binding ProsecnaBrzina, StringFormat=F2}" Width="110"/>
-                        <DataGridTextColumn Header="Pros. puls" Binding="{Binding ProsecanPuls, StringFormat=F2}" Width="100"/>
-                        <DataGridTextColumn Header="Max brzina" Binding="{Binding MaxBrzina, StringFormat=F2}" Width="100"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                    Padding="14"
+                    Margin="0,0,0,10">
+                <StackPanel>
+                    <TextBlock Text="Dictionary prikaz"
+                               FontSize="14"
+                               FontWeight="Bold"
+                               Margin="0,0,0,8"/>
+                    <DataGrid ItemsSource="{Binding DictionaryPrikaz}"
+                              MaxHeight="150"
+                              VerticalScrollBarVisibility="Auto"
+                              >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Period (Datum1, Datum2)" Binding="{Binding Period}" Width="200"/>
+                            <DataGridTextColumn Header="Vozac" Binding="{Binding Vozac}" Width="150"/>
+                            <DataGridTextColumn Header="Podaci [brzina, puls]" Binding="{Binding Podaci}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+
+            <!-- Statistike po biciklu -->
+            <Border Grid.Row="2"
+                    Background="White"
+                    BorderBrush="#E8D7C3"
+                    BorderThickness="1"
+                    Padding="14">
+                <StackPanel>
+                    <TextBlock Text="Statistike po biciklisti"
+                               FontSize="14"
+                               FontWeight="Bold"
+                               Margin="0,0,0,8"/>
+                    <DataGrid ItemsSource="{Binding BicikliStatistike}"
+                              MaxHeight="180"
+                              VerticalScrollBarVisibility="Auto">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Tim" Binding="{Binding Tim}" Width="*"/>
+                            <DataGridTextColumn Header="Vozac" Binding="{Binding Vozac}" Width="*"/>
+                            <DataGridTextColumn Header="Br. merenja" Binding="{Binding BrojMerenja}" Width="90"/>
+                            <DataGridTextColumn Header="Pros. brzina" Binding="{Binding ProsecnaBrzina, StringFormat=F2}" Width="100"/>
+                            <DataGridTextColumn Header="Pros. puls" Binding="{Binding ProsecanPuls, StringFormat=F2}" Width="90"/>
+                            <DataGridTextColumn Header="Max brzina" Binding="{Binding MaxBrzina, StringFormat=F2}" Width="90"/>
+                            <DataGridTextColumn Header="Max puls" Binding="{Binding MaxPuls, StringFormat=F2}" Width="90"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
             </Border>
 
             <!-- Donji panel: metoda + rezultat -->
-            <Grid Grid.Row="2" Margin="0,18,0,0">
+            <Grid Grid.Row="3" Margin="0,14,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1.4*"/>
@@ -258,31 +291,34 @@
                         Padding="18">
                     <StackPanel>
                         <TextBlock Text="{Binding Rezultat.NazivMetode, StringFormat='Rezultat - {0}'}"
-                                   FontSize="18"
-                                   FontWeight="Bold"
-                                   Margin="0,0,0,10"/>
+               FontSize="18"
+               FontWeight="Bold"
+               Margin="0,0,0,10"/>
 
-                        <ItemsControl ItemsSource="{Binding Rezultat.Stavke}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Background="#FFF3E7"
-                                            BorderBrush="#E8D7C3"
-                                            BorderThickness="1"
-                                            Padding="10"
-                                            Margin="0,0,0,8">
-                                        <DockPanel>
-                                            <TextBlock DockPanel.Dock="Right"
-                                                       Text="{Binding Vrednost, StringFormat=F2}"
-                                                       FontSize="18"
-                                                       FontWeight="Bold"
-                                                       Foreground="#2F6F73"/>
-                                            <TextBlock Text="{Binding Opis}"
-                                                       VerticalAlignment="Center"/>
-                                        </DockPanel>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                        <ScrollViewer MaxHeight="200"
+                  VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding Rezultat.Stavke}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#FFF3E7"
+                            BorderBrush="#E8D7C3"
+                            BorderThickness="1"
+                            Padding="10"
+                            Margin="0,0,0,8">
+                                            <DockPanel>
+                                                <TextBlock DockPanel.Dock="Right"
+                                       Text="{Binding Vrednost, StringFormat=F2}"
+                                       FontSize="18"
+                                       FontWeight="Bold"
+                                       Foreground="#2F6F73"/>
+                                                <TextBlock Text="{Binding Opis}"
+                                       VerticalAlignment="Center"/>
+                                            </DockPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
                     </StackPanel>
                 </Border>
             </Grid>

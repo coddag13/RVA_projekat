@@ -65,12 +65,13 @@
     <Compile Include="Interfaces\IStatistickaMetoda.cs" />
     <Compile Include="Models\BicikliStatistika.cs" />
     <Compile Include="Models\StatistikaRezultat.cs" />
+    <Compile Include="Models\TelemetrijaPrikaz.cs" />
     <Compile Include="Services\BiciklStatistikaAdapter.cs" />
+    <Compile Include="Services\BrojOdustajanja.cs" />
     <Compile Include="Services\CsvExporter.cs" />
     <Compile Include="Services\Komponenta1Client.cs" />
-    <Compile Include="Services\MedianaStatistika.cs" />
-    <Compile Include="Services\MinMaxStatistika.cs" />
-    <Compile Include="Services\ProsekStatistika.cs" />
+    <Compile Include="Services\MaxBrzineStatistika.cs" />
+    <Compile Include="Services\PulsRazlikeStatistikacs.cs" />
     <Compile Include="Services\StatistickaObrada.cs" />
     <Compile Include="Services\TextFileLoggeer.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
