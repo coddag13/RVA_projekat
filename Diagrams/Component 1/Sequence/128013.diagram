@@ -1,0 +1,252 @@
+format 224
+
+classinstance 128013 class_ref 128013 // User
+  name ""   xyz 6.67987 4.66463 2000 life_line_z 2000
+classinstance 128141 class_ref 128141 // TelemetrijaView
+  name "telemetrijaView"   xyz 55.9268 10.6646 2005 life_line_z 2000
+classinstance 128269 class_ref 128269 // TelemetrijaViewModel
+  name "telemetrijaVM"   xyz 230.107 9.67987 2010 life_line_z 2000
+classinstance 128397 class_ref 128397 // IValidationService
+  name "validationService"   xyz 423.18 9.67987 2015 life_line_z 2000
+classinstance 128525 class_ref 128525 // AddTelemetrijaCommand
+  name "command"   xyz 614.407 10.6646 2000 life_line_z 2000
+classinstance 128653 class_ref 128653 // ITelemetrijaService
+  name "telemetrijaService"   xyz 1033.84 9.24 2000 life_line_z 2000
+classinstance 128909 class_ref 128909 // ILogger
+  name "logger"   xyz 1732 9.92 2000 life_line_z 2000
+classinstance 129037 class_ref 129037 // SimulatorStanjaVoznje
+  name "simulator"   xyz 1255 9 2000 life_line_z 2000
+classinstance 129165 class_ref 129165 // IStanjeVoznjeHandler
+  name "stanjeHandler"   xyz 1472 9 2000 life_line_z 2000
+classinstance 129421 class_ref 129421 // UndoRedoManager
+  name ""   xyz 856 10.92 2005 life_line_z 2000
+durationcanvas 129549 classinstance_ref 128013 // :User
+  xyzwh 15 70 2010 11 40
+end
+durationcanvas 129677 classinstance_ref 128141 // telemetrijaView:TelemetrijaView
+  xyzwh 131 69 2010 11 25
+end
+durationcanvas 129933 classinstance_ref 128269 // telemetrijaVM:TelemetrijaViewModel
+  xyzwh 316 75 2010 11 111
+end
+durationcanvas 130189 classinstance_ref 128397 // validationService:IValidationService
+  xyzwh 508 82 2010 11 36
+end
+durationcanvas 130573 classinstance_ref 128525 // command:AddTelemetrijaCommand
+  xyzwh 698 133 2010 11 34
+end
+durationcanvas 130829 classinstance_ref 129421 // :UndoRedoManager
+  xyzwh 904 163 2010 11 46
+end
+durationcanvas 131341 classinstance_ref 128525 // command:AddTelemetrijaCommand
+  xyzwh 698 193 2010 11 40
+end
+durationcanvas 131597 classinstance_ref 128653 // telemetrijaService:ITelemetrijaService
+  xyzwh 1125 217 2010 11 25
+end
+durationcanvas 131853 classinstance_ref 128909 // logger:ILogger
+  xyzwh 1768 228 2010 11 31
+end
+durationcanvas 132109 classinstance_ref 128653 // telemetrijaService:ITelemetrijaService
+  xyzwh 1125 247 2010 11 25
+end
+durationcanvas 132365 classinstance_ref 128525 // command:AddTelemetrijaCommand
+  xyzwh 698 257 2010 11 28
+end
+durationcanvas 132621 classinstance_ref 129421 // :UndoRedoManager
+  xyzwh 904 273 2010 11 33
+end
+durationcanvas 132877 classinstance_ref 128269 // telemetrijaVM:TelemetrijaViewModel
+  xyzwh 316 294 2010 11 25
+end
+durationcanvas 133133 classinstance_ref 128269 // telemetrijaVM:TelemetrijaViewModel
+  xyzwh 316 369 2010 11 40
+end
+durationcanvas 133261 classinstance_ref 128653 // telemetrijaService:ITelemetrijaService
+  xyzwh 1125 369 2010 11 34
+end
+durationcanvas 133517 classinstance_ref 129037 // simulator:SimulatorStanjaVoznje
+  xyzwh 1332 375 2010 11 85
+end
+durationcanvas 133773 classinstance_ref 129165 // stanjeHandler:IStanjeVoznjeHandler
+  xyzwh 1560 383 2010 11 34
+end
+durationcanvas 134157 classinstance_ref 128653 // telemetrijaService:ITelemetrijaService
+  xyzwh 1125 391 2010 11 108
+end
+durationcanvas 134541 classinstance_ref 128909 // logger:ILogger
+  xyzwh 1768 458 2010 11 30
+end
+durationcanvas 134925 classinstance_ref 128269 // telemetrijaVM:TelemetrijaViewModel
+  xyzwh 316 482 2010 11 25
+end
+durationcanvas 135181 classinstance_ref 128269 // telemetrijaVM:TelemetrijaViewModel
+  xyzwh 316 530 2010 11 111
+  overlappingdurationcanvas 135821
+    xyzwh 322 609 2020 11 25
+  end
+end
+durationcanvas 135437 classinstance_ref 128653 // telemetrijaService:ITelemetrijaService
+  xyzwh 1125 554 2010 11 37
+end
+msg 129805 synchronous
+  from durationcanvas_ref 129549
+  to durationcanvas_ref 129677
+  yz 69 2015 explicitmsg "Klik na \"Dodaj telemetriju\""
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 17 56
+msg 130061 synchronous
+  from durationcanvas_ref 129677
+  to durationcanvas_ref 129933
+  yz 75 3005 explicitmsg "AddTelemetrijaCommand.Execute()"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 145 61
+msg 130317 synchronous
+  from durationcanvas_ref 129933
+  to durationcanvas_ref 130189
+  yz 83 2015 explicitmsg "ValidirajTelemetriju()"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "novaTelemetrija"
+  label_xy 331 70
+msg 130445 return
+  from durationcanvas_ref 130189
+  to durationcanvas_ref 129933
+  yz 106 2015 explicitmsg "true"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 407 93
+msg 130701 synchronous
+  from durationcanvas_ref 129933
+  to durationcanvas_ref 130573
+  yz 135 2020 explicitmsg "new AddTelemetrijaCommand()"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "service,telemetrija"
+  label_xy 393 122
+msg 130957 synchronous
+  from durationcanvas_ref 129933
+  to durationcanvas_ref 130829
+  yz 169 2015 explicitmsg "ExecuteCommand()"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "command"
+  label_xy 534 157
+msg 131469 synchronous
+  from durationcanvas_ref 130829
+  to durationcanvas_ref 131341
+  yz 193 2015 explicitmsg "Execute()"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 783 180
+msg 131725 synchronous
+  from durationcanvas_ref 131341
+  to durationcanvas_ref 131597
+  yz 217 2015 explicitmsg "Add()"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "telemetrija"
+  label_xy 877 204
+msg 131981 synchronous
+  from durationcanvas_ref 131597
+  to durationcanvas_ref 131853
+  yz 229 2020 explicitmsg "Log()"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "\"Dodata biciklisticka telemetrija\""
+  label_xy 1364 215
+msg 132237 return
+  from durationcanvas_ref 131853
+  to durationcanvas_ref 132109
+  yz 248 2015 explicitmsg "void"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 1442 235
+msg 132493 return
+  from durationcanvas_ref 132109
+  to durationcanvas_ref 132365
+  yz 257 2020 explicitmsg "void"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 906 244
+msg 132749 return
+  from durationcanvas_ref 132365
+  to durationcanvas_ref 132621
+  yz 274 2025 explicitmsg "void"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 796 260
+msg 133005 return
+  from durationcanvas_ref 132621
+  to durationcanvas_ref 132877
+  yz 295 2015 explicitmsg "void"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 605 282
+msg 133389 synchronous
+  from durationcanvas_ref 133133
+  to durationcanvas_ref 133261
+  yz 368 2015 explicitmsg "SimulirajPromjenuStanja(telemetrija)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 638 355
+msg 133645 synchronous
+  from durationcanvas_ref 133261
+  to durationcanvas_ref 133517
+  yz 376 2020 explicitmsg "PromijeniStanje()"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "telemetrija"
+  label_xy 1168 362
+msg 133901 synchronous
+  from durationcanvas_ref 133517
+  to durationcanvas_ref 133773
+  yz 383 2015 explicitmsg "SledeceStanje(telemetrija)"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 1388 370
+msg 134029 return
+  from durationcanvas_ref 133773
+  to durationcanvas_ref 133517
+  yz 405 2020 explicitmsg "StanjeVoznje.VelikiNapori"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 1392 392
+msg 134285 return
+  from durationcanvas_ref 133261
+  to durationcanvas_ref 134157
+  yz 391 2025 unspecifiedmsg
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+msg 134413 return
+  from durationcanvas_ref 133517
+  to durationcanvas_ref 134157
+  yz 414 2015 explicitmsg "void"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 1224 401
+msg 134669 synchronous
+  from durationcanvas_ref 134157
+  to durationcanvas_ref 134541
+  yz 459 2015 explicitmsg "Log()"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  args "\"Promijenjeno stanje telemetrije...\""
+  label_xy 1355 446
+msg 134797 return
+  from durationcanvas_ref 134541
+  to durationcanvas_ref 134157
+  yz 477 2015 explicitmsg "void"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 1442 463
+msg 135053 return
+  from durationcanvas_ref 134157
+  to durationcanvas_ref 134925
+  yz 483 2020 explicitmsg "void"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 715 470
+reflexivemsg 135309 synchronous
+  to durationcanvas_ref 135181
+  yz 530 2015 explicitmsg "LoadTelemetrije()"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 333 516
+msg 135565 synchronous
+  from durationcanvas_ref 135181
+  to durationcanvas_ref 135437
+  yz 555 2020 explicitmsg "GetAll()"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 707 542
+msg 135693 return
+  from durationcanvas_ref 135437
+  to durationcanvas_ref 135181
+  yz 581 2015 explicitmsg "List<BiciklistickaTelemetrija>"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 659 567
+reflexivemsg 135949 synchronous
+  to durationcanvas_ref 135821
+  yz 609 2025 explicitmsg "OnPropertyChanged(\"Telemetrije\")"
+  show_full_operations_definition default show_class_of_operation default drawing_language default show_context_mode default
+  label_xy 333 594
+end

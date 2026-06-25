@@ -7,5 +7,7 @@ namespace Komponenta1.InformacioniSistem.Interfaces
 		DataStore Load();
 
 		void Save(DataStore dataStore);
+
+		bool HasData();
 	}
 }

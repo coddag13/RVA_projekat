@@ -359,6 +359,18 @@ namespace Komponenta1.InformacioniSistem.ViewModels
                 vremeOcitavanja = parsiranoVreme;
             }
 
+            if (PretragaBrzinaVoznje < 0)
+            {
+                PorukaValidacije = "Brzina voznje za pretragu ne moze biti negativna.";
+                return;
+            }
+
+            if (PretragaPulsVozaca < 0)
+            {
+                PorukaValidacije = "Puls vozaca za pretragu ne moze biti negativan.";
+                return;
+            }
+
             Telemetrije = new ObservableCollection<BiciklistickaTelemetrija>(
                 telemetrijaService.Search(biciklId, vremeOcitavanja, PretragaBrzinaVoznje, PretragaPulsVozaca, PretragaStanje?.Stanje));
             PorukaValidacije = "Pretraga telemetrije je zavrsena.";

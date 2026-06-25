@@ -282,6 +282,12 @@ namespace Komponenta1.InformacioniSistem.ViewModels
                 id = parsiraniId;
             }
 
+            if (PretragaTezina.HasValue && PretragaTezina.Value < 0)
+            {
+                PorukaValidacije = "Tezina za pretragu ne moze biti negativna.";
+                return;
+            }
+
             Bicikli = new ObservableCollection<TrkackiBicikl>(
                 biciklService.Search(id, PretragaTim, PretragaVozac, PretragaTezina, PretragaSprinter));
             PorukaValidacije = "Pretraga bicikala je zavrsena.";

@@ -20,11 +20,13 @@ namespace Komponenta1.InformacioniSistem
         public MainViewModel CreateMainViewModel()
         {
             string dataFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
-            string dataFilePath = Path.Combine(dataFolder, "podaci.xml");
+            string xmlFilePath = Path.Combine(dataFolder, "podaci.xml");
+            string jsonFilePath = Path.Combine(dataFolder, "podaci.json");
             string logFilePath = Path.Combine(dataFolder, "aktivnosti.txt");
 
-            IDataStorage dataStorage = new XmlDataStorage(dataFilePath);
-            DataStore dataStore = dataStorage.Load();
+            IDataStorage xmlDataStorage = new XmlDataStorage(xmlFilePath);
+            IDataStorage jsonDataStorage = new JsonDataStorage(jsonFilePath);
+            DataStore dataStore = xmlDataStorage.Load();
 
             SeedDataHelper.DodajPocetnePodatkeAkoJePrazno(dataStore);
 
@@ -44,10 +46,11 @@ namespace Komponenta1.InformacioniSistem
                 bicikliViewModel,
                 telemetrijaViewModel,
                 grafikonViewModel,
-                dataStorage,
+                xmlDataStorage,
+                jsonDataStorage,
                 dataStore);
 
-            dataStorage.Save(dataStore);
+            xmlDataStorage.Save(dataStore);
             logger.Log("Pokrenuta Komponenta 1 - Informacioni sistem.");
             StartWcfHost(biciklService, telemetrijaService, logger);
 

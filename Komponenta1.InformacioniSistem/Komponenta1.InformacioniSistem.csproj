@@ -147,6 +147,7 @@
     <Compile Include="State\UmorStanje.cs" />
     <Compile Include="State\VelikiNaporiStanje.cs" />
     <Compile Include="ViewModels\BicikliViewModel.cs" />
+    <Compile Include="ViewModels\FormatSkladistaOpcija.cs" />
     <Compile Include="ViewModels\GrafikonViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\StanjeFilterOpcija.cs" />

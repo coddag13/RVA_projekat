@@ -48,5 +48,11 @@ namespace Komponenta1.InformacioniSistem.Data
             string json = JsonSerializer.Serialize(dataStore, options);
             File.WriteAllText(filePath, json);
         }
+
+        public bool HasData()
+        {
+            FileInfo fileInfo = new FileInfo(filePath);
+            return fileInfo.Exists && fileInfo.Length > 0;
+        }
     }
 }

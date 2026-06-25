@@ -32,7 +32,7 @@
                                FontWeight="Bold"
                                Margin="0,8,0,2"/>
 
-                    <TextBlock Text="Telemetrijski centar"
+                    <TextBlock Text="Monitoring voznji"
                                FontSize="14"
                                FontWeight="SemiBold"
                                Foreground="#2F6F73"
@@ -50,7 +50,7 @@
                             <TextBlock Text="Lokalna obrada podataka"
                                        FontSize="12"
                                        Opacity="0.85"/>
-                            <TextBlock Text="XML skladiste aktivno"
+                            <TextBlock Text="{Binding AktivnoSkladisteTekst}"
                                        FontSize="12"
                                        Opacity="0.85"/>
                         </StackPanel>
@@ -70,42 +70,13 @@
                                        Opacity="0.9"/>
                         </StackPanel>
                     </Border>
-
-                    <Border Background="#FFF3E7"
-                            BorderBrush="#E8D7C3"
-                            BorderThickness="1"
-                            Padding="14">
-                        <StackPanel>
-                            <TextBlock Text="Domen podataka"
-                                       FontWeight="Bold"
-                                       Margin="0,0,0,8"/>
-                            <TextBlock Text="Trkacki bicikli"
-                                       FontSize="12"
-                                       Opacity="0.85"/>
-                            <TextBlock Text="Biciklisticka telemetrija"
-                                       FontSize="12"
-                                       Opacity="0.85"/>
-                            <TextBlock Text="Stanja voznje"
-                                       FontSize="12"
-                                       Opacity="0.85"/>
-                        </StackPanel>
-                    </Border>
                 </StackPanel>
 
                 <StackPanel DockPanel.Dock="Bottom">
-                    <Border Background="#FFF7EF"
-                            BorderBrush="#E8D7C3"
-                            BorderThickness="1"
-                            Padding="12">
-                        <StackPanel>
-                            <TextBlock Text="Pracenje uzivo"
-                                       FontWeight="Bold"/>
-                            <TextBlock Text="Brzina, puls i status napora"
-                                       FontSize="12"
-                                       Opacity="0.8"
-                                       TextWrapping="Wrap"/>
-                        </StackPanel>
-                    </Border>
+                    <TextBlock Text="Podaci se cuvaju lokalno."
+                               FontSize="12"
+                               Opacity="0.75"
+                               TextWrapping="Wrap"/>
                 </StackPanel>
             </DockPanel>
         </Border>
@@ -123,6 +94,24 @@
                         Style="{StaticResource SecondaryButton}"
                         MinWidth="140"
                         Margin="12,8,0,0"/>
+
+                <Button DockPanel.Dock="Right"
+                        Content="Ucitaj podatke"
+                        Command="{Binding UcitajCommand}"
+                        MinWidth="130"
+                        Margin="12,8,0,0"/>
+
+                <StackPanel DockPanel.Dock="Right"
+                            Width="120"
+                            Margin="0,2,0,0">
+                    <TextBlock Text="Format cuvanja"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               Margin="4,0,0,2"/>
+                    <ComboBox ItemsSource="{Binding DostupniFormatiSkladista}"
+                              SelectedItem="{Binding IzabraniFormatSkladista}"
+                              DisplayMemberPath="Naziv"/>
+                </StackPanel>
 
                 <StackPanel DockPanel.Dock="Left">
                     <TextBlock Text="Pregled voznji"

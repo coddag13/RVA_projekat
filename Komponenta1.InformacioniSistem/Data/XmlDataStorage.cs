@@ -45,5 +45,11 @@ namespace Komponenta1.InformacioniSistem.Data
                 serializer.Serialize(stream, dataStore);
             }
         }
+
+        public bool HasData()
+        {
+            FileInfo fileInfo = new FileInfo(filePath);
+            return fileInfo.Exists && fileInfo.Length > 0;
+        }
     }
 }
